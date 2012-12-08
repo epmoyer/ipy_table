@@ -1,30 +1,16 @@
-#!/usr/bin/python
+"""Table formatting package for IP[y]"""
+
 from IPython.core.display import HTML
-# from prettytable import *
 from numpy import float64
-import csv
+import copy
 
 _VERSION = 1.5
 _TABLE = None
 
-def read_csv_file(filename, skip_first_row=False):
-    '''Reads a CSV file and returns the data as a two dimensional list'''
-    data = []
-    with open(filename, 'rU') as csvfile:
-        reader = csv.reader(csvfile)
-        for row in reader:
-            data.append(row)
-    if skip_first_row:
-        if len(data):
-            # Delete the first row
-            del data[0]
-    return data
-
 
 def _formatter(item, float_format):
-    """
-    Applies _float_format if the item is a float or float64, otherwise
-    returns item unmodified.
+    """Applies _float_format if the item is a float or float64, otherwise returns item unmodified.
+
     This function is written such that it won't error if numpy isn't imported.
     """
 
@@ -32,27 +18,27 @@ def _formatter(item, float_format):
         return float_format % item
     return item
 
+
 def _convert_to_list(data):
-    """
-    Accepts a list or a numpy.ndarray and returns a list.
+    """Accepts a list or a numpy.ndarray and returns a list.
+
     This function is written such that it won't error if numpy isn't imported.
     """
     if str(type(data)) == "<type 'numpy.ndarray'>":
         return data.tolist()
     return data
 
-def valid_key(dict, key):
-    """Test that a disctionary key exists and that it's value is not blank"""
-    if key in dict:
+
+def valid_key(dictionary, key):
+    """Test that a dictionary key exists and that it's value is not blank"""
+    if key in dictionary:
         if dict[key]:
             return True
     return False
 
+
 def tabulate(data_list, columns, float_format="%0.4f"):
-    '''
-    Renders a list (not array) of items into an HTML table
-    with a specified number of columns.
-    '''
+    """Renders a list (not array) of items into an HTML table with a specified number of columns."""
     total_items = len(data_list)
     rows = total_items / columns
     if total_items % columns:
@@ -63,7 +49,7 @@ def tabulate(data_list, columns, float_format="%0.4f"):
 
     # Create an array and pad the ending cells with null strings
     array = copy.copy(_convert_to_list(data_list))
-    pad_cells = ['' for i in range(num_blank_cells)]
+    pad_cells = ['' for dummy in range(num_blank_cells)]
     array = array + pad_cells
     array = [array[x:x + columns] for x in xrange(0, len(array), columns)]
 
@@ -71,30 +57,99 @@ def tabulate(data_list, columns, float_format="%0.4f"):
     table = Table(array)
     return table.render()
 
+
 def table(array, float_format="%0.4f", interactive=True):
     global _TABLE
     _TABLE = Table(array, float_format, interactive)
     return _TABLE._render_update()
 
-def set_cell_style(row, column, bold=None, italic=None, color=None, thick_border=None, no_border=None, row_span=None, column_span=None, align=None, width=None):
-    global _TABLE
-    return _TABLE.set_cell_style(row, column, bold=bold, italic=italic, color=color, thick_border=thick_border, no_border=no_border, row_span=row_span, column_span=column_span, align=align, width=width)
 
-def set_column_style(column, bold=None, italic=None, color=None, thick_border=None, no_border=None, row_span=None, column_span=None, align=None, width=None):
+def set_cell_style(
+        row,
+        column,
+        bold=None,
+        italic=None,
+        color=None,
+        thick_border=None,
+        no_border=None,
+        row_span=None,
+        column_span=None,
+        align=None,
+        width=None):
     global _TABLE
-    return _TABLE.set_column_style(column, bold=bold, italic=italic, color=color, thick_border=thick_border, no_border=no_border, row_span=row_span, column_span=column_span, align=align, width=width)
+    return _TABLE.set_cell_style(
+        row,
+        column,
+        bold=bold,
+        italic=italic,
+        color=color,
+        thick_border=thick_border,
+        no_border=no_border,
+        row_span=row_span,
+        column_span=column_span,
+        align=align,
+        width=width)
 
-def set_row_style(row, bold=None, italic=None, color=None, thick_border=None, no_border=None, row_span=None, column_span=None, align=None, width=None):
+
+def set_column_style(
+        column,
+        bold=None,
+        italic=None,
+        color=None,
+        thick_border=None,
+        no_border=None,
+        row_span=None,
+        column_span=None,
+        align=None,
+        width=None):
     global _TABLE
-    return _TABLE.set_row_style(row, bold=bold, italic=italic, color=color, thick_border=thick_border, no_border=no_border, row_span=row_span, column_span=column_span, align=align, width=width)
+    return _TABLE.set_column_style(
+        column,
+        bold=bold,
+        italic=italic,
+        color=color,
+        thick_border=thick_border,
+        no_border=no_border,
+        row_span=row_span,
+        column_span=column_span,
+        align=align,
+        width=width)
+
+
+def set_row_style(
+        row,
+        bold=None,
+        italic=None,
+        color=None,
+        thick_border=None,
+        no_border=None,
+        row_span=None,
+        column_span=None,
+        align=None,
+        width=None):
+    global _TABLE
+    return _TABLE.set_row_style(
+        row,
+        bold=bold,
+        italic=italic,
+        color=color,
+        thick_border=thick_border,
+        no_border=no_border,
+        row_span=row_span,
+        column_span=column_span,
+        align=align,
+        width=width)
+
 
 def apply_style(style_name):
     global _TABLE
     return _TABLE.apply_style(style_name)
 
+
 def render():
     global _TABLE
     return _TABLE.render()
+
 
 class Table(object):
 
@@ -110,9 +165,9 @@ class Table(object):
         self._interactive = interactive
 
         self._global_style = dict()
-        self._row_styles = [dict() for i in range(self._num_rows)]
-        self._column_styles = [dict() for i in range(self._num_columns)]
-        self._cell_styles = [[dict() for i in range(self._num_columns)] for i in range(self._num_rows)]
+        self._row_styles = [dict() for dummy in range(self._num_rows)]
+        self._column_styles = [dict() for dummy in range(self._num_columns)]
+        self._cell_styles = [[dict() for dummy in range(self._num_columns)] for dummy2 in range(self._num_rows)]
         self._debug = False
 
         self.styles = ['basic']
@@ -129,16 +184,80 @@ class Table(object):
         self.set_cell_style(0, 0, color='White', no_border='left,top')
         return self._render_update()
 
-    def set_cell_style(self, row, column, bold=None, italic=None, color=None, thick_border=None, no_border=None, row_span=None, column_span=None, align=None, width=None):
-        self._set_cell_style(row, column, bold=bold, italic=italic, color=color, thick_border=thick_border, no_border=no_border, row_span=row_span, column_span=column_span, align=align, width=width)
+    def set_cell_style(
+            self,
+            row,
+            column,
+            bold=None,
+            italic=None,
+            color=None,
+            thick_border=None,
+            no_border=None,
+            row_span=None,
+            column_span=None,
+            align=None,
+            width=None):
+        self._set_cell_style(
+            row,
+            column,
+            bold=bold,
+            italic=italic,
+            color=color,
+            thick_border=thick_border,
+            no_border=no_border,
+            row_span=row_span,
+            column_span=column_span,
+            align=align,
+            width=width)
         return self._render_update()
 
-    def set_row_style(self, row, bold=None, italic=None, color=None, thick_border=None, no_border=None, row_span=None, column_span=None, align=None, width=None):
-        self._set_row_style(row, bold=bold, italic=italic, color=color, thick_border=thick_border, no_border=no_border, row_span=row_span, column_span=column_span, align=align, width=width)
+    def set_row_style(
+            self,
+            row,
+            bold=None,
+            italic=None,
+            color=None,
+            thick_border=None,
+            no_border=None,
+            row_span=None,
+            column_span=None,
+            align=None,
+            width=None):
+        self._set_row_style(
+            row,
+            bold=bold,
+            italic=italic,
+            color=color,
+            thick_border=thick_border,
+            no_border=no_border,
+            row_span=row_span,
+            column_span=column_span,
+            align=align,
+            width=width)
         return self._render_update()
 
-    def set_column_style(self, column, bold=None, italic=None, color=None, thick_border=None, no_border=None, row_span=None, column_span=None, align=None, width=None):
-        self._set_column_style(column, bold=bold, italic=italic, color=color, thick_border=thick_border, no_border=no_border, row_span=row_span, column_span=column_span, align=align, width=width)
+    def set_column_style(self,
+            column,
+            bold=None,
+            italic=None,
+            color=None,
+            thick_border=None,
+            no_border=None,
+            row_span=None,
+            column_span=None,
+            align=None,
+            width=None):
+        self._set_column_style(
+            column,
+            bold=bold,
+            italic=italic,
+            color=color,
+            thick_border=thick_border,
+            no_border=no_border,
+            row_span=row_span,
+            column_span=column_span,
+            align=align,
+            width=width)
         return self._render_update()
 
     def render(self):
@@ -188,7 +307,18 @@ class Table(object):
             return self.render()
         return None
 
-    def _build_style_dict(self, bold=None, italic=None, color=None, thick_border=None, no_border=None, row_span=None, column_span=None, align=None, width=None):
+    def _build_style_dict(
+            self,
+            bold=None,
+            italic=None,
+            color=None,
+            thick_border=None,
+            no_border=None,
+            row_span=None,
+            column_span=None,
+            align=None,
+            width=None):
+
         style_dict = dict()
         if bold is not None:
             style_dict['bold'] = bold
@@ -219,11 +349,34 @@ class Table(object):
         return style_dict
 
     def _merge_cell_style(self, row, column, cell_style):
-        """Merge new cell style dict into the old, superseding any existing items"""
+        """Merge new cell style dictionary into the old, superseding any existing items"""
         self._cell_styles[row][column] = dict(self._cell_styles[row][column].items() + cell_style.items())
 
-    def _set_cell_style(self, row, column, bold=None, italic=None, color=None, thick_border=None, no_border=None, row_span=None, column_span=None, align=None, width=None):
-        cell_style = self._build_style_dict(bold=bold, italic=italic, color=color, thick_border=thick_border, no_border=no_border, row_span=row_span, column_span=column_span, align=align, width=width)
+    def _set_cell_style(
+            self,
+            row,
+            column,
+            bold=None,
+            italic=None,
+            color=None,
+            thick_border=None,
+            no_border=None,
+            row_span=None,
+            column_span=None,
+            align=None,
+            width=None):
+
+        cell_style = self._build_style_dict(
+            bold=bold,
+            italic=italic,
+            color=color,
+            thick_border=thick_border,
+            no_border=no_border,
+            row_span=row_span,
+            column_span=column_span,
+            align=align,
+            width=width)
+
         self._merge_cell_style(row, column, cell_style)
         if row_span:
             for row in range(row + 1, row + row_span):
@@ -248,13 +401,59 @@ class Table(object):
         if no_border and any(x in no_border for x in ('top', 'all')) and row > 0:
             self._merge_cell_style(row - 1, column, self._build_style_dict(no_border='bottom'))
 
-    def _set_row_style(self, row, bold=None, italic=None, color=None, thick_border=None, no_border=None, row_span=None, column_span=None, align=None, width=None):
-        for column in range(self._num_columns):
-            self._set_cell_style(row, column, bold=bold, italic=italic, color=color, thick_border=thick_border, no_border=no_border, row_span=row_span, column_span=column_span, align=align, width=width)
+    def _set_row_style(
+            self,
+            row,
+            bold=None,
+            italic=None,
+            color=None,
+            thick_border=None,
+            no_border=None,
+            row_span=None,
+            column_span=None,
+            align=None,
+            width=None):
 
-    def _set_column_style(self, column, bold=None, italic=None, color=None, thick_border=None, no_border=None, row_span=None, column_span=None, align=None, width=None):
+        for column in range(self._num_columns):
+            self._set_cell_style(
+                row,
+                column,
+                bold=bold,
+                italic=italic,
+                color=color,
+                thick_border=thick_border,
+                no_border=no_border,
+                row_span=row_span,
+                column_span=column_span,
+                align=align,
+                width=width)
+
+    def _set_column_style(
+            self,
+            column,
+            bold=None,
+            italic=None,
+            color=None,
+            thick_border=None,
+            no_border=None,
+            row_span=None,
+            column_span=None,
+            align=None,
+            width=None):
+
         for row in range(self._num_rows):
-            self._set_cell_style(row, column, bold=bold, italic=italic, color=color, thick_border=thick_border, no_border=no_border, row_span=row_span, column_span=column_span, align=align, width=width)
+            self._set_cell_style(
+                row,
+                column,
+                bold=bold,
+                italic=italic,
+                color=color,
+                thick_border=thick_border,
+                no_border=no_border,
+                row_span=row_span,
+                column_span=column_span,
+                align=align,
+                width=width)
 
     def _get_style_html(self, style_dict):
         style_html = ''
@@ -300,10 +499,11 @@ class Table(object):
 
         return style_html
 
-
     def _formatter(self, item, float_format):
-        if type(item) is float or type(item) is float64:
+        """Applies float format to item if item is a float or float64.
+
+        This function is written such that it won't error if numpy isn't imported.
+        """
+        if str(type(item)) in ["<type 'float'>", "<type 'numpy.float64'>"]:
             return float_format % item
         return item
-
-
