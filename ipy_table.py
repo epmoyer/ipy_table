@@ -138,7 +138,8 @@ class IpyTable(object):
         #---------------------------------------
         # Generate TABLE tag (<tr>)
         #---------------------------------------
-        html = '<table border="1" cellpadding="3" cellspacing="0" style="border:1px solid black;width:10%;border-collapse:collapse;">'
+        # html = '<table border="1" cellpadding="3" cellspacing="0" style="border:1px solid black;width:10%;border-collapse:collapse;">'
+        html = '<table border="1" cellpadding="3" cellspacing="0" style="border:1px solid black;border-collapse:collapse;">'
         # html = '<table border="1" cellpadding="3" cellspacing="0" style="border:1px none white;width:10%;border-collapse:collapse;">'
         # html = '<table>'
         for row, row_data in enumerate(self.array):
