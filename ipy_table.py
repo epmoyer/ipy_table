@@ -1,187 +1,60 @@
 """Table formatting package for IP[y]"""
 
 from IPython.core.display import HTML
-from numpy import float64
+# from numpy import float64
 import copy
+import numpy
 
 _VERSION = 1.5
 _TABLE = None
 
-
-def _formatter(item, float_format):
-    """Applies _float_format if the item is a float or float64, otherwise returns item unmodified.
-
-    This function is written such that it won't error if numpy isn't imported.
-    """
-
-    if str(type(item)) in ["<type 'float'>", "<type 'numpy.float64'>"]:
-        return float_format % item
-    return item
+#-----------------------------
+# Classes
+#-----------------------------
 
 
-def _convert_to_list(data):
-    """Accepts a list or a numpy.ndarray and returns a list.
-
-    This function is written such that it won't error if numpy isn't imported.
-    """
-    if str(type(data)) == "<type 'numpy.ndarray'>":
-        return data.tolist()
-    return data
-
-
-def valid_key(dictionary, key):
-    """Test that a dictionary key exists and that it's value is not blank"""
-    if key in dictionary:
-        if dict[key]:
-            return True
-    return False
-
-
-def tabulate(data_list, columns, float_format="%0.4f"):
-    """Renders a list (not array) of items into an HTML table with a specified number of columns."""
-    total_items = len(data_list)
-    rows = total_items / columns
-    if total_items % columns:
-        rows += 1
-    num_blank_cells = rows * columns - total_items
-    if num_blank_cells:
-        rows += 1
-
-    # Create an array and pad the ending cells with null strings
-    array = copy.copy(_convert_to_list(data_list))
-    pad_cells = ['' for dummy in range(num_blank_cells)]
-    array = array + pad_cells
-    array = [array[x:x + columns] for x in xrange(0, len(array), columns)]
-
-    # Render the array
-    table = Table(array)
-    return table.render()
-
-
-def table(array, float_format="%0.4f", interactive=True):
-    global _TABLE
-    _TABLE = Table(array, float_format, interactive)
-    return _TABLE._render_update()
-
-
-def set_cell_style(
-        row,
-        column,
-        bold=None,
-        italic=None,
-        color=None,
-        thick_border=None,
-        no_border=None,
-        row_span=None,
-        column_span=None,
-        align=None,
-        width=None):
-    global _TABLE
-    return _TABLE.set_cell_style(
-        row,
-        column,
-        bold=bold,
-        italic=italic,
-        color=color,
-        thick_border=thick_border,
-        no_border=no_border,
-        row_span=row_span,
-        column_span=column_span,
-        align=align,
-        width=width)
-
-
-def set_column_style(
-        column,
-        bold=None,
-        italic=None,
-        color=None,
-        thick_border=None,
-        no_border=None,
-        row_span=None,
-        column_span=None,
-        align=None,
-        width=None):
-    global _TABLE
-    return _TABLE.set_column_style(
-        column,
-        bold=bold,
-        italic=italic,
-        color=color,
-        thick_border=thick_border,
-        no_border=no_border,
-        row_span=row_span,
-        column_span=column_span,
-        align=align,
-        width=width)
-
-
-def set_row_style(
-        row,
-        bold=None,
-        italic=None,
-        color=None,
-        thick_border=None,
-        no_border=None,
-        row_span=None,
-        column_span=None,
-        align=None,
-        width=None):
-    global _TABLE
-    return _TABLE.set_row_style(
-        row,
-        bold=bold,
-        italic=italic,
-        color=color,
-        thick_border=thick_border,
-        no_border=no_border,
-        row_span=row_span,
-        column_span=column_span,
-        align=align,
-        width=width)
-
-
-def apply_style(style_name):
-    global _TABLE
-    return _TABLE.apply_style(style_name)
-
-
-def render():
-    global _TABLE
-    return _TABLE.render()
-
-
-class Table(object):
+class IpyTable(object):
 
     #---------------------------------
     # External methods
     #---------------------------------
 
-    def __init__(self, array, float_format="%0.4f", interactive=False):
+    def __init__(self, array, float_format="%0.4f", interactive=False, debug=False):
         self.array = array
         self._num_rows = len(array)
         self._num_columns = len(array[0])
         self._float_format = float_format
         self._interactive = interactive
+        self._debug = debug
 
         self._global_style = dict()
         self._row_styles = [dict() for dummy in range(self._num_rows)]
         self._column_styles = [dict() for dummy in range(self._num_columns)]
         self._cell_styles = [[dict() for dummy in range(self._num_columns)] for dummy2 in range(self._num_rows)]
-        self._debug = False
 
         self.styles = ['basic']
 
     def apply_style(self, style_name):
-        self.set_row_style(0, bold=True, color='LightGray')
-        for row, row_data in enumerate(self.array):
-            if row > 0:
+        if style_name in ['basic', 'basic_left', 'basic_both']:
+
+            # Color rows in alternating colors
+            for row, row_data in enumerate(self.array):
                 if row % 2:
                     self.set_row_style(row, color='Ivory')
                 else:
                     self.set_row_style(row, color='AliceBlue')
-        self.set_column_style(0, bold=True, color='LightGray')
-        self.set_cell_style(0, 0, color='White', no_border='left,top')
+
+            # Color column header
+            if not style_name == 'basic_left':
+                self.set_row_style(0, bold=True, color='LightGray')
+
+            # Color row header
+            if not style_name == 'basic':
+                self.set_column_style(0, bold=True, color='LightGray')
+
+            # Remove upper left corner cell (make white with no left and top border)
+            if style_name == 'basic_both':
+                self.set_cell_style(0, 0, color='White', no_border='left,top')
         return self._render_update()
 
     def set_cell_style(
@@ -265,9 +138,9 @@ class Table(object):
         #---------------------------------------
         # Generate TABLE tag (<tr>)
         #---------------------------------------
-        # html = '<table border="1" cellpadding="3" cellspacing="0" style="border:1px solid black;width:10%;border-collapse:collapse;">'
+        html = '<table border="1" cellpadding="3" cellspacing="0" style="border:1px solid black;width:10%;border-collapse:collapse;">'
         # html = '<table border="1" cellpadding="3" cellspacing="0" style="border:1px none white;width:10%;border-collapse:collapse;">'
-        html = '<table>'
+        # html = '<table>'
         for row, row_data in enumerate(self.array):
 
             #---------------------------------------
@@ -275,7 +148,7 @@ class Table(object):
             #---------------------------------------
             html += '<tr>'
             for (column, item) in enumerate(row_data):
-                if not valid_key(self._cell_styles[row][column], 'suppress'):
+                if not _key_is_valid(self._cell_styles[row][column], 'suppress'):
                     #---------------------------------------
                     # Generate CELL tag (<td>)
                     #---------------------------------------
@@ -283,9 +156,9 @@ class Table(object):
                     item_html = self._formatter(item, self._float_format)
 
                     # Add bold and italic tags if set
-                    if valid_key(self._cell_styles[row][column], 'bold'):
+                    if _key_is_valid(self._cell_styles[row][column], 'bold'):
                         item_html = '<b>' + item_html + '</b>'
-                    if valid_key(self._cell_styles[row][column], 'italic'):
+                    if _key_is_valid(self._cell_styles[row][column], 'italic'):
                         item_html = '<i>' + item_html + '</i>'
 
                     # Get html style string
@@ -457,10 +330,10 @@ class Table(object):
 
     def _get_style_html(self, style_dict):
         style_html = ''
-        if valid_key(style_dict, 'color'):
+        if _key_is_valid(style_dict, 'color'):
             style_html += 'background-color:' + style_dict['color'] + ';'
 
-        if valid_key(style_dict, 'thick_border'):
+        if _key_is_valid(style_dict, 'thick_border'):
             edges = style_dict['thick_border'].replace(' ', '').split(',')
             if 'left' in edges:
                 style_html += 'border-left: 3px solid black;'
@@ -469,9 +342,9 @@ class Table(object):
             if 'top' in edges:
                 style_html += 'border-top: 3px solid black;'
             if 'bottom' in edges:
-                style_html += 'border-bottom: 2px solid black;'
+                style_html += 'border-bottom: 3px solid black;'
 
-        if valid_key(style_dict, 'no_border'):
+        if _key_is_valid(style_dict, 'no_border'):
             edges = style_dict['no_border'].replace(' ', '').split(',')
             if 'left' in edges:
                 style_html += 'border-left: 1px solid transparent;'
@@ -482,28 +355,173 @@ class Table(object):
             if 'bottom' in edges:
                 style_html += 'border-bottom: 1px solid transparent;'
 
-        if valid_key(style_dict, 'align'):
+        if _key_is_valid(style_dict, 'align'):
             style_html += 'text-align:' + str(style_dict['align']) + ';'
 
-        if valid_key(style_dict, 'width'):
+        if _key_is_valid(style_dict, 'width'):
             style_html += 'width:' + str(style_dict['width']) + 'px;'
 
         if style_html:
             style_html = ' style="' + style_html + '"'
 
-        if valid_key(style_dict, 'row_span'):
+        if _key_is_valid(style_dict, 'row_span'):
             style_html = 'rowspan="' + str(style_dict['row_span']) + '";' + style_html
 
-        if valid_key(style_dict, 'column_span'):
+        if _key_is_valid(style_dict, 'column_span'):
             style_html = 'colspan="' + str(style_dict['column_span']) + '";' + style_html
 
         return style_html
 
     def _formatter(self, item, float_format):
-        """Applies float format to item if item is a float or float64.
+        """Applies float format to item if item is a float or float64. Returns string."""
 
-        This function is written such that it won't error if numpy isn't imported.
-        """
+        # The following check is performed as a string comparison
+        # so that ipy_table does not need to require (import) numpy.
         if str(type(item)) in ["<type 'float'>", "<type 'numpy.float64'>"]:
-            return float_format % item
-        return item
+            text = float_format % item
+        else:
+            text = str(item)
+
+        # Convert all spaces to non-breaking and return
+        return text.replace(' ', '&nbsp')
+
+#-----------------------------
+# Public functions
+#-----------------------------
+
+
+def tabulate(data_list, columns, float_format="%0.4f"):
+    """Renders a list (not array) of items into an HTML table with a specified number of columns."""
+    total_items = len(data_list)
+    rows = total_items / columns
+    if total_items % columns:
+        rows += 1
+    num_blank_cells = rows * columns - total_items
+    if num_blank_cells:
+        rows += 1
+
+    # Create an array and pad the ending cells with null strings
+    array = copy.copy(_convert_to_list(data_list))
+    pad_cells = ['' for dummy in range(num_blank_cells)]
+    array = array + pad_cells
+    array = [array[x:x + columns] for x in xrange(0, len(array), columns)]
+
+    # Render the array
+    table = IpyTable(array)
+    return table.render()
+
+
+def make_table(array, float_format="%0.4f", interactive=True, debug=False):
+    global _TABLE
+    _TABLE = IpyTable(array, float_format, interactive, debug)
+    return _TABLE._render_update()
+
+
+def set_cell_style(
+        row,
+        column,
+        bold=None,
+        italic=None,
+        color=None,
+        thick_border=None,
+        no_border=None,
+        row_span=None,
+        column_span=None,
+        align=None,
+        width=None):
+    global _TABLE
+    return _TABLE.set_cell_style(
+        row,
+        column,
+        bold=bold,
+        italic=italic,
+        color=color,
+        thick_border=thick_border,
+        no_border=no_border,
+        row_span=row_span,
+        column_span=column_span,
+        align=align,
+        width=width)
+
+
+def set_column_style(
+        column,
+        bold=None,
+        italic=None,
+        color=None,
+        thick_border=None,
+        no_border=None,
+        row_span=None,
+        column_span=None,
+        align=None,
+        width=None):
+    global _TABLE
+    return _TABLE.set_column_style(
+        column,
+        bold=bold,
+        italic=italic,
+        color=color,
+        thick_border=thick_border,
+        no_border=no_border,
+        row_span=row_span,
+        column_span=column_span,
+        align=align,
+        width=width)
+
+
+def set_row_style(
+        row,
+        bold=None,
+        italic=None,
+        color=None,
+        thick_border=None,
+        no_border=None,
+        row_span=None,
+        column_span=None,
+        align=None,
+        width=None):
+    global _TABLE
+    return _TABLE.set_row_style(
+        row,
+        bold=bold,
+        italic=italic,
+        color=color,
+        thick_border=thick_border,
+        no_border=no_border,
+        row_span=row_span,
+        column_span=column_span,
+        align=align,
+        width=width)
+
+
+def apply_style(style_name):
+    global _TABLE
+    return _TABLE.apply_style(style_name)
+
+
+def render():
+    global _TABLE
+    return _TABLE.render()
+
+#-----------------------------
+# Private functions
+#-----------------------------
+
+
+def _convert_to_list(data):
+    """Accepts a list or a numpy.ndarray and returns a list."""
+
+    # The following check is performed as a string comparison
+    # so that ipy_table does not need to require (import) numpy.
+    if str(type(data)) == "<type 'numpy.ndarray'>":
+        return data.tolist()
+
+    return data
+
+
+def _key_is_valid(dictionary, key):
+    """Test that a dictionary key exists and that it's value is not blank"""
+    if key in dictionary:
+        if dictionary[key]:
+            return True
+    return False
