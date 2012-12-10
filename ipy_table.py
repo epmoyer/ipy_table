@@ -57,88 +57,18 @@ class IpyTable(object):
                 self.set_cell_style(0, 0, color='White', no_border='left,top')
         return self._render_update()
 
-    def set_cell_style(
-            self,
-            row,
-            column,
-            bold=None,
-            italic=None,
-            color=None,
-            thick_border=None,
-            no_border=None,
-            row_span=None,
-            column_span=None,
-            align=None,
-            width=None):
-
-        self._set_cell_style_norender(
-            row,
-            column,
-            bold=bold,
-            italic=italic,
-            color=color,
-            thick_border=thick_border,
-            no_border=no_border,
-            row_span=row_span,
-            column_span=column_span,
-            align=align,
-            width=width)
+    def set_cell_style(self, row, column, **style_args):
+        self._set_cell_style_norender(row, column, **style_args)
         return self._render_update()
 
-    def set_row_style(
-            self,
-            row,
-            bold=None,
-            italic=None,
-            color=None,
-            thick_border=None,
-            no_border=None,
-            row_span=None,
-            column_span=None,
-            align=None,
-            width=None):
-
+    def set_row_style(self, row, **style_args):
         for column in range(self._num_columns):
-            self._set_cell_style_norender(
-                row,
-                column,
-                bold=bold,
-                italic=italic,
-                color=color,
-                thick_border=thick_border,
-                no_border=no_border,
-                row_span=row_span,
-                column_span=column_span,
-                align=align,
-                width=width)
-
+            self._set_cell_style_norender(row, column, **style_args)
         return self._render_update()
 
-    def set_column_style(self,
-            column,
-            bold=None,
-            italic=None,
-            color=None,
-            thick_border=None,
-            no_border=None,
-            row_span=None,
-            column_span=None,
-            align=None,
-            width=None):
-
+    def set_column_style(self, column, **style_args):
         for row in range(self._num_rows):
-            self._set_cell_style_norender(
-                row,
-                column,
-                bold=bold,
-                italic=italic,
-                color=color,
-                thick_border=thick_border,
-                no_border=no_border,
-                row_span=row_span,
-                column_span=column_span,
-                align=align,
-                width=width)
+            self._set_cell_style_norender(row, column, **style_args)
 
         return self._render_update()
 
@@ -190,98 +120,46 @@ class IpyTable(object):
             return self.render()
         return None
 
-    def _build_style_dict(
-            self,
-            bold=None,
-            italic=None,
-            color=None,
-            thick_border=None,
-            no_border=None,
-            row_span=None,
-            column_span=None,
-            align=None,
-            width=None):
-
-        style_dict = dict()
-        if bold is not None:
-            style_dict['bold'] = bold
-        if italic is not None:
-            style_dict['italic'] = italic
-        if color is not None:
-            style_dict['color'] = color
-        if thick_border is not None:
-            if thick_border == 'all':
+    def _build_style_dict(self, **style_args):
+        style_dict = copy.deepcopy(style_args)
+        if 'thick_border' in style_dict:
+            if style_dict['thick_border'] == 'all':
                 style_dict['thick_border'] = 'left,right,top,bottom'
-            else:
-                style_dict['thick_border'] = thick_border
-        if no_border is not None:
-            if no_border == 'all':
+        if 'no_border' in style_dict:
+            if style_dict['no_border'] == 'all':
                 style_dict['no_border'] = 'left,right,top,bottom'
-            else:
-                style_dict['no_border'] = no_border
-
-        if row_span is not None:
-            style_dict['row_span'] = row_span
-        if column_span is not None:
-            style_dict['column_span'] = column_span
-        if align is not None:
-            style_dict['align'] = align
-        if width is not None:
-            style_dict['width'] = width
-
         return style_dict
 
     def _merge_cell_style(self, row, column, cell_style):
         """Merge new cell style dictionary into the old, superseding any existing items"""
         self._cell_styles[row][column] = dict(self._cell_styles[row][column].items() + cell_style.items())
 
-    def _set_cell_style_norender(
-            self,
-            row,
-            column,
-            bold=None,
-            italic=None,
-            color=None,
-            thick_border=None,
-            no_border=None,
-            row_span=None,
-            column_span=None,
-            align=None,
-            width=None):
+    def _set_cell_style_norender(self, row, column, **style_args):
 
-        cell_style = self._build_style_dict(
-            bold=bold,
-            italic=italic,
-            color=color,
-            thick_border=thick_border,
-            no_border=no_border,
-            row_span=row_span,
-            column_span=column_span,
-            align=align,
-            width=width)
+        cell_style = self._build_style_dict(**style_args)
 
         self._merge_cell_style(row, column, cell_style)
-        if row_span:
-            for row in range(row + 1, row + row_span):
+        if 'row_span' in cell_style:
+            for row in range(row + 1, row + cell_style['row_span']):
                 self._cell_styles[row][column]['suppress'] = True
-        if column_span:
-            for column in range(column + 1, column + column_span):
+        if 'column_span' in cell_style:
+            for column in range(column + 1, column + cell_style['column_span']):
                 self._cell_styles[row][column]['suppress'] = True
 
         # If a thick right hand border was specified, then also apply it to the left of the adjacent cell (if one exists)
-        if thick_border and any(x in thick_border for x in ('right', 'all')) and column + 1 < self._num_columns:
+        if 'thick_border' in cell_style and 'right' in cell_style['thick_border'] and column + 1 < self._num_columns:
             self._merge_cell_style(row, column + 1, self._build_style_dict(thick_border='left'))
 
         # If a clear left hand border was specified, then also apply it to the right of the adjacent cell (if one exists)
-        if no_border and any(x in no_border for x in ('left', 'all')) and column > 0:
+        if 'no_border' in cell_style and 'left' in cell_style['no_border'] and column > 0:
             self._merge_cell_style(row, column - 1, self._build_style_dict(no_border='right'))
 
         # If a thick bottom border was specified, then also apply it to the top of the adjacent cell (if one exists)
-        if thick_border and any(x in thick_border for x in ('bottom', 'all')) and row + 1 < self._num_rows:
+        if 'thick_border' in cell_style and 'bottom' in cell_style['thick_border'] and row + 1 < self._num_rows:
             self._merge_cell_style(row + 1, column, self._build_style_dict(thick_border='top'))
 
         # If a clear top border was specified, then also apply it to the bottom of the adjacent cell (if one exists)
-        if no_border and any(x in no_border for x in ('top', 'all')) and row > 0:
+        if 'no_border' in cell_style and 'top' in cell_style['no_border'] and row > 0:
             self._merge_cell_style(row - 1, column, self._build_style_dict(no_border='bottom'))
 
     def _get_style_html(self, style_dict):
@@ -373,81 +251,19 @@ def make_table(array, float_format="%0.4f", interactive=True, debug=False):
     return _TABLE._render_update()
 
 
-def set_cell_style(
-        row,
-        column,
-        bold=None,
-        italic=None,
-        color=None,
-        thick_border=None,
-        no_border=None,
-        row_span=None,
-        column_span=None,
-        align=None,
-        width=None):
+def set_cell_style(row, column, **style_args):
     global _TABLE
-    return _TABLE.set_cell_style(
-        row,
-        column,
-        bold=bold,
-        italic=italic,
-        color=color,
-        thick_border=thick_border,
-        no_border=no_border,
-        row_span=row_span,
-        column_span=column_span,
-        align=align,
-        width=width)
+    return _TABLE.set_cell_style(row, column, **style_args)
 
 
-def set_column_style(
-        column,
-        bold=None,
-        italic=None,
-        color=None,
-        thick_border=None,
-        no_border=None,
-        row_span=None,
-        column_span=None,
-        align=None,
-        width=None):
+def set_column_style(column, **style_args):
     global _TABLE
-    return _TABLE.set_column_style(
-        column,
-        bold=bold,
-        italic=italic,
-        color=color,
-        thick_border=thick_border,
-        no_border=no_border,
-        row_span=row_span,
-        column_span=column_span,
-        align=align,
-        width=width)
+    return _TABLE.set_column_style(column, **style_args)
 
 
-def set_row_style(
-        row,
-        bold=None,
-        italic=None,
-        color=None,
-        thick_border=None,
-        no_border=None,
-        row_span=None,
-        column_span=None,
-        align=None,
-        width=None):
+def set_row_style(row, **style_args):
     global _TABLE
-    return _TABLE.set_row_style(
-        row,
-        bold=bold,
-        italic=italic,
-        color=color,
-        thick_border=thick_border,
-        no_border=no_border,
-        row_span=row_span,
-        column_span=column_span,
-        align=align,
-        width=width)
+    return _TABLE.set_row_style(row, **style_args)
 
 
 def apply_style(style_name):
