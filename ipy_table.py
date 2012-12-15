@@ -93,7 +93,7 @@ class IpyTable(object):
                     # Generate CELL tag (<td>)
                     #---------------------------------------
                     # Apply floating point formatter to the cell contents (if it is a float)
-                    item_html = self._formatter(item, self._float_format)
+                    item_html = self._formatter(item, self._float_format, self._cell_styles[row][column])
 
                     # Add bold and italic tags if set
                     if _key_is_valid(self._cell_styles[row][column], 'bold'):
@@ -206,8 +206,9 @@ class IpyTable(object):
 
         return style_html
 
-    def _formatter(self, item, float_format):
+    def _formatter(self, item, float_format, cell_style):
         """Applies float format to item if item is a float or float64. Returns string."""
+        # TODO: Make float_format a cell style like any other
 
         # The following check is performed as a string comparison
         # so that ipy_table does not need to require (import) numpy.
@@ -216,9 +217,11 @@ class IpyTable(object):
         else:
             text = str(item)
 
-        # Convert all spaces to non-breaking and return
-        return text.replace(' ', '&nbsp')
-
+        # If cell wrapping is not specified
+        if not ('wrap' in cell_style and cell_style['wrap']):
+            # Convert all spaces to non-breaking and return
+            text = text.replace(' ', '&nbsp')
+        return text
 #-----------------------------
 # Public functions
 #-----------------------------
