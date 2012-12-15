@@ -19,18 +19,16 @@ class IpyTable(object):
     # External methods
     #---------------------------------
 
-    def __init__(self, array, float_format="%0.4f", interactive=False, debug=False):
+    def __init__(self, array, interactive=False, debug=False):
         self.array = array
-        self._num_rows = len(array)
-        self._num_columns = len(array[0])
-        self._float_format = float_format
         self._interactive = interactive
         self._debug = debug
 
-        self._global_style = dict()
-        self._row_styles = [dict() for dummy in range(self._num_rows)]
-        self._column_styles = [dict() for dummy in range(self._num_columns)]
-        self._cell_styles = [[dict() for dummy in range(self._num_columns)] for dummy2 in range(self._num_rows)]
+        self._num_rows = len(array)
+        self._num_columns = len(array[0])
+        self._cell_styles = [[{'float_format': '%0.4f'}
+                              for dummy in range(self._num_columns)]
+                              for dummy2 in range(self._num_rows)]
 
         self.styles = ['basic']
 
@@ -69,7 +67,12 @@ class IpyTable(object):
     def set_column_style(self, column, **style_args):
         for row in range(self._num_rows):
             self._set_cell_style_norender(row, column, **style_args)
+        return self._render_update()
 
+    def set_global_style(self, **style_args):
+        for row in range(self._num_rows):
+            for column in range(self._num_columns):
+                self._set_cell_style_norender(row, column, **style_args)
         return self._render_update()
 
     def render(self):
@@ -93,7 +96,7 @@ class IpyTable(object):
                     # Generate CELL tag (<td>)
                     #---------------------------------------
                     # Apply floating point formatter to the cell contents (if it is a float)
-                    item_html = self._formatter(item, self._float_format, self._cell_styles[row][column])
+                    item_html = self._formatter(item, self._cell_styles[row][column])
 
                     # Add bold and italic tags if set
                     if _key_is_valid(self._cell_styles[row][column], 'bold'):
@@ -206,14 +209,13 @@ class IpyTable(object):
 
         return style_html
 
-    def _formatter(self, item, float_format, cell_style):
+    def _formatter(self, item, cell_style):
         """Applies float format to item if item is a float or float64. Returns string."""
-        # TODO: Make float_format a cell style like any other
 
         # The following check is performed as a string comparison
         # so that ipy_table does not need to require (import) numpy.
-        if str(type(item)) in ["<type 'float'>", "<type 'numpy.float64'>"]:
-            text = float_format % item
+        if str(type(item)) in ["<type 'float'>", "<type 'numpy.float64'>"] and 'float_format' in cell_style:
+            text = cell_style['float_format'] % item
         else:
             text = str(item)
 
@@ -248,9 +250,9 @@ def tabulate(data_list, columns, float_format="%0.4f"):
     return table.render()
 
 
-def make_table(array, float_format="%0.4f", interactive=True, debug=False):
+def make_table(array, interactive=True, debug=False):
     global _TABLE
-    _TABLE = IpyTable(array, float_format, interactive, debug)
+    _TABLE = IpyTable(array, interactive=interactive, debug=debug)
     return _TABLE._render_update()
 
 
@@ -267,6 +269,11 @@ def set_column_style(column, **style_args):
 def set_row_style(row, **style_args):
     global _TABLE
     return _TABLE.set_row_style(row, **style_args)
+
+
+def set_global_style(**style_args):
+    global _TABLE
+    return _TABLE.set_global_style(**style_args)
 
 
 def apply_style(style_name):
