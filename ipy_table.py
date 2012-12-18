@@ -138,9 +138,15 @@ class IpyTable(object):
 
     def _merge_cell_style(self, row, column, cell_style):
         """Merge new cell style dictionary into the old, superseding any existing items"""
-        # #print "merge at row:%d col:%d was:%s adding:%s" % (row, column, self._cell_styles[row][column], cell_style)
-        self._cell_styles[row][column] = dict(self._cell_styles[row][column].items() + cell_style.items())
-        # #print "became: %s" % self._cell_styles[row][column]
+        styles = self._cell_styles[row][column]
+        for (new_key, new_value) in cell_style.items():
+            if (new_key in ['border', 'no_border']) and (new_key in styles):
+                # Merge the two border lists
+                old_borders = self._split_by_comma(styles[new_key])
+                new_borders = self._split_by_comma(new_value)
+                styles[new_key] = ",".join(old_borders + list(set(new_borders) - set(old_borders)))
+            else:
+                styles[new_key] = new_value
 
     def _set_cell_style_norender(self, row, column, **style_args):
 
@@ -176,11 +182,11 @@ class IpyTable(object):
             style_html += 'background-color:' + style_dict['color'] + ';'
 
         if _key_is_valid(style_dict, 'thick_border'):
-            for edge in style_dict['thick_border'].replace(' ', '').split(','):
+            for edge in self._split_by_comma(style_dict['thick_border']):
                 style_html += 'border-%s: 3px solid black;' % edge
 
         if _key_is_valid(style_dict, 'no_border'):
-            for edge in style_dict['no_border'].replace(' ', '').split(','):
+            for edge in self._split_by_comma(style_dict['no_border']):
                 style_html += 'border-%s: 1px solid transparent;' % edge
 
         if _key_is_valid(style_dict, 'align'):
@@ -215,6 +221,9 @@ class IpyTable(object):
             # Convert all spaces to non-breaking and return
             text = text.replace(' ', '&nbsp')
         return text
+
+    def _split_by_comma(self, comma_delimited_text):
+        return comma_delimited_text.replace(' ', '').split(',')
 #-----------------------------
 # Public functions
 #-----------------------------
