@@ -3,6 +3,9 @@
 from IPython.core.display import HTML
 import copy
 
+# TODO: Change border edges to list instead of comma separated text
+# TODO: Change _merge_cell_style to properly handle merging of border edges
+
 __version__ = 1.6
 
 # Private table object used for interactive mode
@@ -135,7 +138,9 @@ class IpyTable(object):
 
     def _merge_cell_style(self, row, column, cell_style):
         """Merge new cell style dictionary into the old, superseding any existing items"""
+        # #print "merge at row:%d col:%d was:%s adding:%s" % (row, column, self._cell_styles[row][column], cell_style)
         self._cell_styles[row][column] = dict(self._cell_styles[row][column].items() + cell_style.items())
+        # #print "became: %s" % self._cell_styles[row][column]
 
     def _set_cell_style_norender(self, row, column, **style_args):
 
@@ -171,26 +176,12 @@ class IpyTable(object):
             style_html += 'background-color:' + style_dict['color'] + ';'
 
         if _key_is_valid(style_dict, 'thick_border'):
-            edges = style_dict['thick_border'].replace(' ', '').split(',')
-            if 'left' in edges:
-                style_html += 'border-left: 3px solid black;'
-            if 'right' in edges:
-                style_html += 'border-right: 3px solid black;'
-            if 'top' in edges:
-                style_html += 'border-top: 3px solid black;'
-            if 'bottom' in edges:
-                style_html += 'border-bottom: 3px solid black;'
+            for edge in style_dict['thick_border'].replace(' ', '').split(','):
+                style_html += 'border-%s: 3px solid black;' % edge
 
         if _key_is_valid(style_dict, 'no_border'):
-            edges = style_dict['no_border'].replace(' ', '').split(',')
-            if 'left' in edges:
-                style_html += 'border-left: 1px solid transparent;'
-            if 'right' in edges:
-                style_html += 'border-right: 1px solid transparent;'
-            if 'top' in edges:
-                style_html += 'border-top: 1px solid transparent;'
-            if 'bottom' in edges:
-                style_html += 'border-bottom: 1px solid transparent;'
+            for edge in style_dict['no_border'].replace(' ', '').split(','):
+                style_html += 'border-%s: 1px solid transparent;' % edge
 
         if _key_is_valid(style_dict, 'align'):
             style_html += 'text-align:' + str(style_dict['align']) + ';'
