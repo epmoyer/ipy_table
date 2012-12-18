@@ -1,11 +1,11 @@
 """Table formatting package for IP[y]"""
 
 from IPython.core.display import HTML
-# from numpy import float64
 import copy
-import numpy
 
-_VERSION = 1.5
+__version__ = 1.6
+
+# Private table object used for interactive mode
 _TABLE = None
 
 #-----------------------------
@@ -30,29 +30,29 @@ class IpyTable(object):
                               for dummy in range(self._num_columns)]
                               for dummy2 in range(self._num_rows)]
 
-        self.styles = ['basic']
+    @property
+    def themes(self):
+        """Get list of supported formatting themes"""
+        return ['basic', 'basic_left', 'basic_both']
 
-    def apply_style(self, style_name):
-        if style_name in ['basic', 'basic_left', 'basic_both']:
-
+    def apply_theme(self, theme_name):
+        if theme_name in self.themes:
             # Color rows in alternating colors
             for row, row_data in enumerate(self.array):
                 if row % 2:
                     self.set_row_style(row, color='Ivory')
                 else:
                     self.set_row_style(row, color='AliceBlue')
-
             # Color column header
-            if not style_name == 'basic_left':
+            if not theme_name == 'basic_left':
                 self.set_row_style(0, bold=True, color='LightGray')
-
             # Color row header
-            if not style_name == 'basic':
+            if not theme_name == 'basic':
                 self.set_column_style(0, bold=True, color='LightGray')
-
             # Remove upper left corner cell (make white with no left and top border)
-            if style_name == 'basic_both':
+            if theme_name == 'basic_both':
                 self.set_cell_style(0, 0, color='White', no_border='left,top')
+
         return self._render_update()
 
     def set_cell_style(self, row, column, **style_args):
@@ -276,9 +276,9 @@ def set_global_style(**style_args):
     return _TABLE.set_global_style(**style_args)
 
 
-def apply_style(style_name):
+def apply_theme(style_name):
     global _TABLE
-    return _TABLE.apply_style(style_name)
+    return _TABLE.apply_theme(style_name)
 
 
 def render():
