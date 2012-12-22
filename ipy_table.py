@@ -1,4 +1,67 @@
-"""Table formatting package for IP[y] Notebooks"""
+"""Table formatting package for IP[y] Notebooks
+
+ipy_table is a support module for creating formatted tables in an
+IPython Notebook. ipy_table is an independent project and is not
+an official component of the IPython package.
+
+Documentation is provided by the documentation notebooks supplied with
+this package:
+    ipy_table-Introduction.ipynb
+    ipy_table-Reference.ipynb
+
+All cell, row, column, and global style formatting functions accept
+optional style_args. style_args support the following arguments:
+    color=<colorstring>
+        <colorstring> can be any any standard web/X11 color name.
+        For a list see http://en.wikipedia.org/wiki/Web_colors
+    bold=<True/False>
+    italic=<True/False>
+    thick_border=<edgelist>
+        <edgelist> is a comma delimited string containing any of the
+        keywords 'left', 'right', 'bottom' and 'top' to specify
+        individual edges, or 'all' to specify all edges.
+    no_border=<edgelist>
+        <edgelist> is a comma delimited string containing any of the
+        keywords 'left', 'right', 'bottom' and 'top' to specify
+        individual edges, or 'all' to specify all edges.
+    row_span=<row count>
+    column_span=<column_count>
+    width=<width in pixels>
+    align=<alignmentstring>
+        <alignmentstring> can be 'left', 'right', or 'center'
+    wrap=<True/False>
+    float_format=<formatstring>
+        <formatstring> is a standard Python '%' format string
+        (e.g. '%0.6f' or '$%0.2f')
+
+Design goals:
+    * Easy to use in an interactive IPython Notebook session.
+      (minimal syntax, interactive modification of styles)
+    * Maintainability
+      (minimize the overhead of adding new style features)
+    * Robustness over HTML verbosity
+      (HTML styles are only manipulated at the cell level, which
+      results in robust style flexibility and general implementation
+      simplicity at the expense of occasional HTML verbosity.
+      HTML row styles and table styles are never manipulated).
+
+---------------------------------------------------------------------------
+Copyright (c) 2012, ipy_table Development Team.
+
+Distributed under the terms of the Modified BSD License.
+
+The full license is in the file COPYING.txt, distributed with this software.
+
+This project is maintained at http://github.com/ipy_table
+"""
+
+#-----------------------------------------------------------------------------
+# Copyright (c) 2012, ipy_table Development Team.
+#
+# Distributed under the terms of the Modified BSD License.
+#
+# The full license is in the file COPYING.txt, distributed with this software.
+#-----------------------------------------------------------------------------
 
 from IPython.core.display import HTML
 import copy
@@ -133,7 +196,7 @@ class IpyTable(object):
                         self._cell_styles[row][column])
 
                     # Append cell
-                    html += '<td ' + style_html + '>' + item_html + '</td>'
+                    html += '<td' + style_html + '>' + item_html + '</td>'
             html += '</tr>'
         if self._debug:
             print html
@@ -257,7 +320,10 @@ class IpyTable(object):
             style_html = 'colspan="' + str(style_dict['column_span']) + \
                 '";' + style_html
 
-        return style_html
+        # Prepend a space if non-blank
+        if style_html:
+            return ' ' + style_html
+        return ''
 
     def _formatter(self, item, cell_style):
         """Apply formating to cell contents.
