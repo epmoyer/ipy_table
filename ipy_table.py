@@ -3,7 +3,6 @@
 from IPython.core.display import HTML
 import copy
 
-# TODO: Adhere to 80 column limit
 
 __version__ = 1.07
 
@@ -36,7 +35,7 @@ class IpyTable(object):
 
         self._cell_styles = [[{'float_format': '%0.4f'}
                               for dummy in range(self._num_columns)]
-                              for dummy2 in range(self._num_rows)]
+                             for dummy2 in range(self._num_rows)]
 
     @property
     def themes(self):
@@ -62,11 +61,13 @@ class IpyTable(object):
             # Color row header
             if not theme_name == 'basic':
                 self.set_column_style(0, bold=True, color='LightGray')
-            # Remove upper left corner cell (make white with no left and top border)
+            # Remove upper left corner cell (make white with no left
+            # and no top border)
             if theme_name == 'basic_both':
                 self.set_cell_style(0, 0, color='White', no_border='left,top')
         else:
-            raise ValueError('Unknown theme "%s". Expected one of %s.' % (theme_name, str(self.themes)))
+            raise ValueError('Unknown theme "%s". Expected one of %s.' %
+                             (theme_name, str(self.themes)))
 
         return self._render_update()
 
@@ -95,12 +96,13 @@ class IpyTable(object):
         return self._render_update()
 
     def render(self):
-        """Render the table.  Returns an iPython IPython.core.display object."""
+        """Render the table.  Return an iPython IPython.core.display object."""
 
         #---------------------------------------
         # Generate TABLE tag (<tr>)
         #---------------------------------------
-        html = '<table border="1" cellpadding="3" cellspacing="0" style="border:1px solid black;border-collapse:collapse;">'
+        html = '<table border="1" cellpadding="3" cellspacing="0" ' \
+            + ' style="border:1px solid black;border-collapse:collapse;">'
 
         for row, row_data in enumerate(self.array):
 
@@ -109,12 +111,16 @@ class IpyTable(object):
             #---------------------------------------
             html += '<tr>'
             for (column, item) in enumerate(row_data):
-                if not _key_is_valid(self._cell_styles[row][column], 'suppress'):
+                if not _key_is_valid(
+                        self._cell_styles[row][column], 'suppress'):
+
                     #---------------------------------------
                     # Generate CELL tag (<td>)
                     #---------------------------------------
-                    # Apply floating point formatter to the cell contents (if it is a float)
-                    item_html = self._formatter(item, self._cell_styles[row][column])
+                    # Apply floating point formatter to the cell contents
+                    # (if it is a float)
+                    item_html = self._formatter(
+                        item, self._cell_styles[row][column])
 
                     # Add bold and italic tags if set
                     if _key_is_valid(self._cell_styles[row][column], 'bold'):
@@ -123,7 +129,8 @@ class IpyTable(object):
                         item_html = '<i>' + item_html + '</i>'
 
                     # Get html style string
-                    style_html = self._get_style_html(self._cell_styles[row][column])
+                    style_html = self._get_style_html(
+                        self._cell_styles[row][column])
 
                     # Append cell
                     html += '<td ' + style_html + '>' + item_html + '</td>'
@@ -154,14 +161,18 @@ class IpyTable(object):
         return style_dict
 
     def _merge_cell_style(self, row, column, cell_style):
-        """Merge new cell style dictionary into the old, superseding any existing items."""
+        """Merge new cell style dictionary into the old
+
+        Existing items are superseded by new.
+        """
         styles = self._cell_styles[row][column]
         for (new_key, new_value) in cell_style.items():
             if (new_key in ['border', 'no_border']) and (new_key in styles):
                 # Merge the two border lists
                 old_borders = self._split_by_comma(styles[new_key])
                 new_borders = self._split_by_comma(new_value)
-                styles[new_key] = ",".join(old_borders + list(set(new_borders) - set(old_borders)))
+                styles[new_key] = ",".join(
+                    old_borders + list(set(new_borders) - set(old_borders)))
             else:
                 styles[new_key] = new_value
 
@@ -174,24 +185,46 @@ class IpyTable(object):
             for row in range(row + 1, row + cell_style['row_span']):
                 self._cell_styles[row][column]['suppress'] = True
         if 'column_span' in cell_style:
-            for column in range(column + 1, column + cell_style['column_span']):
+            for column in range(
+                    column + 1,
+                    column + cell_style['column_span']):
                 self._cell_styles[row][column]['suppress'] = True
 
-        # If a thick right hand border was specified, then also apply it to the left of the adjacent cell (if one exists)
-        if 'thick_border' in cell_style and 'right' in cell_style['thick_border'] and column + 1 < self._num_columns:
-            self._merge_cell_style(row, column + 1, self._build_style_dict(thick_border='left'))
+        # If a thick right hand border was specified, then also apply it
+        # to the left of the adjacent cell (if one exists)
+        if ('thick_border' in cell_style
+                and 'right' in cell_style['thick_border']
+                and column + 1 < self._num_columns):
+            self._merge_cell_style(
+                row, column + 1,
+                self._build_style_dict(thick_border='left'))
 
-        # If a clear left hand border was specified, then also apply it to the right of the adjacent cell (if one exists)
-        if 'no_border' in cell_style and 'left' in cell_style['no_border'] and column > 0:
-            self._merge_cell_style(row, column - 1, self._build_style_dict(no_border='right'))
+        # If a clear left hand border was specified, then also apply it
+        # to the right of the adjacent cell (if one exists)
+        if ('no_border' in cell_style
+                and 'left' in cell_style['no_border']
+                and column > 0):
+            self._merge_cell_style(
+                row, column - 1,
+                self._build_style_dict(no_border='right'))
 
-        # If a thick bottom border was specified, then also apply it to the top of the adjacent cell (if one exists)
-        if 'thick_border' in cell_style and 'bottom' in cell_style['thick_border'] and row + 1 < self._num_rows:
-            self._merge_cell_style(row + 1, column, self._build_style_dict(thick_border='top'))
+        # If a thick bottom border was specified, then also apply it to
+        # the top of the adjacent cell (if one exists)
+        if ('thick_border' in cell_style
+                and 'bottom' in cell_style['thick_border']
+                and row + 1 < self._num_rows):
+            self._merge_cell_style(
+                row + 1, column,
+                self._build_style_dict(thick_border='top'))
 
-        # If a clear top border was specified, then also apply it to the bottom of the adjacent cell (if one exists)
-        if 'no_border' in cell_style and 'top' in cell_style['no_border'] and row > 0:
-            self._merge_cell_style(row - 1, column, self._build_style_dict(no_border='bottom'))
+        # If a clear top border was specified, then also apply it to
+        # the bottom of the adjacent cell (if one exists)
+        if ('no_border' in cell_style
+                and 'top' in cell_style['no_border']
+                and row > 0):
+            self._merge_cell_style(
+                row - 1, column,
+                self._build_style_dict(no_border='bottom'))
 
     def _get_style_html(self, style_dict):
         """Parse the style dictionary and return equivalent html style text."""
@@ -217,10 +250,12 @@ class IpyTable(object):
             style_html = ' style="' + style_html + '"'
 
         if _key_is_valid(style_dict, 'row_span'):
-            style_html = 'rowspan="' + str(style_dict['row_span']) + '";' + style_html
+            style_html = 'rowspan="' + str(style_dict['row_span']) + \
+                '";' + style_html
 
         if _key_is_valid(style_dict, 'column_span'):
-            style_html = 'colspan="' + str(style_dict['column_span']) + '";' + style_html
+            style_html = 'colspan="' + str(style_dict['column_span']) + \
+                '";' + style_html
 
         return style_html
 
@@ -234,7 +269,8 @@ class IpyTable(object):
 
         # The following check is performed as a string comparison
         # so that ipy_table does not need to require (import) numpy.
-        if str(type(item)) in ["<type 'float'>", "<type 'numpy.float64'>"] and 'float_format' in cell_style:
+        if (str(type(item)) in ["<type 'float'>", "<type 'numpy.float64'>"]
+                and 'float_format' in cell_style):
             text = cell_style['float_format'] % item
         else:
             text = str(item)
@@ -255,7 +291,7 @@ class IpyTable(object):
 
 
 def tabulate(data_list, columns, float_format="%0.4f"):
-    """Renders a list (not array) of items into an HTML table with a specified number of columns."""
+    """Renders a list (not array) of items into an HTML table."""
     total_items = len(data_list)
     rows = total_items / columns
     if total_items % columns:
@@ -309,7 +345,8 @@ def set_global_style(**style_args):
 def apply_theme(style_name):
     """Apply a formatting theme to the entire table.
 
-    The list of available themes is returned by the .themes property of an IpyTable object.
+    The list of available themes is returned by the .themes property of
+    an IpyTable object.
     """
     global _TABLE
     return _TABLE.apply_theme(style_name)
