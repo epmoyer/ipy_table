@@ -356,8 +356,9 @@ class IpyTable(object):
 #-----------------------------
 
 
-def tabulate(data_list, columns, float_format="%0.4f"):
+def tabulate(data_list, columns, interactive=True, debug=False):
     """Renders a list (not array) of items into an HTML table."""
+    global _TABLE
     total_items = len(data_list)
     rows = total_items / columns
     if total_items % columns:
@@ -373,8 +374,8 @@ def tabulate(data_list, columns, float_format="%0.4f"):
     array = [array[x:x + columns] for x in xrange(0, len(array), columns)]
 
     # Render the array
-    table = IpyTable(array)
-    return table.render()
+    _TABLE = IpyTable(array, interactive=interactive, debug=debug)
+    return _TABLE._render_update()
 
 
 def make_table(array, interactive=True, debug=False):
