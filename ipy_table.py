@@ -1,12 +1,9 @@
-"""Table formatting package for IP[y]"""
+"""Table formatting package for IP[y] Notebooks"""
 
 from IPython.core.display import HTML
 import copy
 
-# TODO: Change border edges to list instead of comma separated text
-# TODO: Change _merge_cell_style to properly handle merging of border edges
-
-__version__ = 1.6
+__version__ = 1.07
 
 # Private table object used for interactive mode
 _TABLE = None
@@ -29,6 +26,12 @@ class IpyTable(object):
 
         self._num_rows = len(array)
         self._num_columns = len(array[0])
+
+        # Check that array is well formed
+        for row in array:
+            if len(row) != self._num_columns:
+                raise ValueError("Array rows must all be of equal length.")
+
         self._cell_styles = [[{'float_format': '%0.4f'}
                               for dummy in range(self._num_columns)]
                               for dummy2 in range(self._num_rows)]
@@ -41,7 +44,7 @@ class IpyTable(object):
     def apply_theme(self, theme_name):
         if theme_name in self.themes:
             # Color rows in alternating colors
-            for row, row_data in enumerate(self.array):
+            for row in range(len(self.array)):
                 if row % 2:
                     self.set_row_style(row, color='Ivory')
                 else:
@@ -55,6 +58,8 @@ class IpyTable(object):
             # Remove upper left corner cell (make white with no left and top border)
             if theme_name == 'basic_both':
                 self.set_cell_style(0, 0, color='White', no_border='left,top')
+        else:
+            raise ValueError('Unknown theme "%s". Expected one of %s.' % (theme_name, str(self.themes)))
 
         return self._render_update()
 
@@ -79,14 +84,11 @@ class IpyTable(object):
         return self._render_update()
 
     def render(self):
-        # import pdb; pdb.set_trace()
         #---------------------------------------
         # Generate TABLE tag (<tr>)
         #---------------------------------------
-        # html = '<table border="1" cellpadding="3" cellspacing="0" style="border:1px solid black;width:10%;border-collapse:collapse;">'
         html = '<table border="1" cellpadding="3" cellspacing="0" style="border:1px solid black;border-collapse:collapse;">'
-        # html = '<table border="1" cellpadding="3" cellspacing="0" style="border:1px none white;width:10%;border-collapse:collapse;">'
-        # html = '<table>'
+
         for row, row_data in enumerate(self.array):
 
             #---------------------------------------
@@ -224,6 +226,7 @@ class IpyTable(object):
 
     def _split_by_comma(self, comma_delimited_text):
         return comma_delimited_text.replace(' ', '').split(',')
+
 #-----------------------------
 # Public functions
 #-----------------------------
