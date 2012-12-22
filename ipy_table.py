@@ -3,6 +3,8 @@
 from IPython.core.display import HTML
 import copy
 
+# TODO: Adhere to 80 column limit
+
 __version__ = 1.07
 
 # Private table object used for interactive mode
@@ -38,10 +40,15 @@ class IpyTable(object):
 
     @property
     def themes(self):
-        """Get list of supported formatting themes"""
+        """Get list of supported formatting themes."""
         return ['basic', 'basic_left', 'basic_both']
 
     def apply_theme(self, theme_name):
+        """Apply a formatting theme to the entire table.
+
+        The list of available themes is returned by the .themes property.
+        """
+
         if theme_name in self.themes:
             # Color rows in alternating colors
             for row in range(len(self.array)):
@@ -64,26 +71,32 @@ class IpyTable(object):
         return self._render_update()
 
     def set_cell_style(self, row, column, **style_args):
+        """Apply style(s) to a single cell."""
         self._set_cell_style_norender(row, column, **style_args)
         return self._render_update()
 
     def set_row_style(self, row, **style_args):
+        """Apply style(s) to a table row."""
         for column in range(self._num_columns):
             self._set_cell_style_norender(row, column, **style_args)
         return self._render_update()
 
     def set_column_style(self, column, **style_args):
+        """Apply style(s) to  a table column."""
         for row in range(self._num_rows):
             self._set_cell_style_norender(row, column, **style_args)
         return self._render_update()
 
     def set_global_style(self, **style_args):
+        """Apply style(s) to all table cells."""
         for row in range(self._num_rows):
             for column in range(self._num_columns):
                 self._set_cell_style_norender(row, column, **style_args)
         return self._render_update()
 
     def render(self):
+        """Render the table.  Returns an iPython IPython.core.display object."""
+
         #---------------------------------------
         # Generate TABLE tag (<tr>)
         #---------------------------------------
@@ -124,11 +137,13 @@ class IpyTable(object):
     #---------------------------------
 
     def _render_update(self):
+        """Renders the table only if in interactive mode."""
         if(self._interactive):
             return self.render()
         return None
 
     def _build_style_dict(self, **style_args):
+        """Returns a cell style dictionary based on the style arguments."""
         style_dict = copy.deepcopy(style_args)
         if 'thick_border' in style_dict:
             if style_dict['thick_border'] == 'all':
@@ -139,7 +154,7 @@ class IpyTable(object):
         return style_dict
 
     def _merge_cell_style(self, row, column, cell_style):
-        """Merge new cell style dictionary into the old, superseding any existing items"""
+        """Merge new cell style dictionary into the old, superseding any existing items."""
         styles = self._cell_styles[row][column]
         for (new_key, new_value) in cell_style.items():
             if (new_key in ['border', 'no_border']) and (new_key in styles):
@@ -151,7 +166,7 @@ class IpyTable(object):
                 styles[new_key] = new_value
 
     def _set_cell_style_norender(self, row, column, **style_args):
-
+        """Apply style(s) to a single cell, without rendering."""
         cell_style = self._build_style_dict(**style_args)
 
         self._merge_cell_style(row, column, cell_style)
@@ -179,6 +194,7 @@ class IpyTable(object):
             self._merge_cell_style(row - 1, column, self._build_style_dict(no_border='bottom'))
 
     def _get_style_html(self, style_dict):
+        """Parse the style dictionary and return equivalent html style text."""
         style_html = ''
         if _key_is_valid(style_dict, 'color'):
             style_html += 'background-color:' + style_dict['color'] + ';'
@@ -209,7 +225,12 @@ class IpyTable(object):
         return style_html
 
     def _formatter(self, item, cell_style):
-        """Applies float format to item if item is a float or float64. Returns string."""
+        """Apply formating to cell contents.
+
+        Applies float format to item if item is a float or float64.
+        Converts spaces to non-breaking if wrap is not enabled.
+        Returns string.
+        """
 
         # The following check is performed as a string comparison
         # so that ipy_table does not need to require (import) numpy.
@@ -225,6 +246,7 @@ class IpyTable(object):
         return text
 
     def _split_by_comma(self, comma_delimited_text):
+        """Returns a list of the words in the comma delimited text."""
         return comma_delimited_text.replace(' ', '').split(',')
 
 #-----------------------------
@@ -254,37 +276,47 @@ def tabulate(data_list, columns, float_format="%0.4f"):
 
 
 def make_table(array, interactive=True, debug=False):
+    """Create a table in interactive mode."""
     global _TABLE
     _TABLE = IpyTable(array, interactive=interactive, debug=debug)
     return _TABLE._render_update()
 
 
 def set_cell_style(row, column, **style_args):
+    """Apply style(s) to a single cell."""
     global _TABLE
     return _TABLE.set_cell_style(row, column, **style_args)
 
 
 def set_column_style(column, **style_args):
+    """Apply style(s) to  a table column."""
     global _TABLE
     return _TABLE.set_column_style(column, **style_args)
 
 
 def set_row_style(row, **style_args):
+    """Apply style(s) to a table row."""
     global _TABLE
     return _TABLE.set_row_style(row, **style_args)
 
 
 def set_global_style(**style_args):
+    """Apply style(s) to all table cells."""
     global _TABLE
     return _TABLE.set_global_style(**style_args)
 
 
 def apply_theme(style_name):
+    """Apply a formatting theme to the entire table.
+
+    The list of available themes is returned by the .themes property of an IpyTable object.
+    """
     global _TABLE
     return _TABLE.apply_theme(style_name)
 
 
 def render():
+    """Render the table.  Returns an iPython IPython.core.display object."""
     global _TABLE
     return _TABLE.render()
 
@@ -305,7 +337,7 @@ def _convert_to_list(data):
 
 
 def _key_is_valid(dictionary, key):
-    """Test that a dictionary key exists and that it's value is not blank"""
+    """Test that a dictionary key exists and that it's value is not blank."""
     if key in dictionary:
         if dictionary[key]:
             return True
