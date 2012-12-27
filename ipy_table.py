@@ -128,17 +128,20 @@ class IpyTable(object):
 
     def set_cell_style(self, row, column, **style_args):
         """Apply style(s) to a single cell."""
+        self._range_check(row=row, column=column)
         self._set_cell_style_norender(row, column, **style_args)
         return self._render_update()
 
     def set_row_style(self, row, **style_args):
         """Apply style(s) to a table row."""
+        self._range_check(row=row)
         for column in range(self._num_columns):
             self._set_cell_style_norender(row, column, **style_args)
         return self._render_update()
 
     def set_column_style(self, column, **style_args):
         """Apply style(s) to  a table column."""
+        self._range_check(column=column)
         for row in range(self._num_rows):
             self._set_cell_style_norender(row, column, **style_args)
         return self._render_update()
@@ -190,6 +193,27 @@ class IpyTable(object):
                     html += '<td' + style_html + '>' + item_html + '</td>'
             html += '</tr>'
         return html
+
+    def _range_check(self, **check_args):
+        """Range check row and/or column index
+
+        Expected argyments:
+            row = <row number>
+            column = <column number>
+        """
+        if 'row' in check_args:
+            row = check_args['row']
+            if row < 0 or row >= self._num_rows:
+                raise ValueError(
+                    'Bad row (%d).  Expected row in range 0 to %d.' %
+                    (row, self._num_rows - 1))
+
+        if 'column' in check_args:
+            column = check_args['column']
+            if column < 0 or column >= self._num_columns:
+                raise ValueError(
+                    'Bad column (%d).  Expected column in range 0 to %d.' %
+                    (column, self._num_columns - 1))
 
     def render(self):
         """Render the table.  Return an iPython IPython.core.display object."""
