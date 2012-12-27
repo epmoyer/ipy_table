@@ -52,14 +52,14 @@ Distributed under the terms of the Modified BSD License.
 
 The full license is in the file COPYING.txt, distributed with this software.
 
-This project is maintained at http://github.com/ipy_table
+This project is maintained at http://github.com/epmoyer/ipy_table
 """
 
 from IPython.core.display import HTML
 import copy
 
 
-__version__ = 1.07
+__version__ = 1.08
 
 # Private table object used for interactive mode
 _TABLE = None

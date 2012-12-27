@@ -2,7 +2,7 @@ OVERVIEW
 ========
 ipy_table is a support module for creating formatted tables in an IPython Notebook. ipy_table is an independent project and is not an official component of the IPython package.
 
-ipy_table is maintained at http://github.com/ipy_table
+ipy_table is maintained at http://github.com/epmoyer/ipy_table
 
 ipython is maintained at http://github.com/ipython, and documentation is available from http://ipython.org/
 

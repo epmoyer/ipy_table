@@ -43,7 +43,7 @@ The ipy_table Development Team is the set of all contributors to the ipy_table
 project.  
 
 The core team that coordinates development on GitHub can be found here:
-http://github.com/ipy_table.  As of late 2012, it consists of:
+http://github.com/epmoyer/ipy_table.  As of late 2012, it consists of:
 
 * Eric Moyer
 
