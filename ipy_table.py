@@ -55,14 +55,6 @@ The full license is in the file COPYING.txt, distributed with this software.
 This project is maintained at http://github.com/ipy_table
 """
 
-#-----------------------------------------------------------------------------
-# Copyright (c) 2012, ipy_table Development Team.
-#
-# Distributed under the terms of the Modified BSD License.
-#
-# The full license is in the file COPYING.txt, distributed with this software.
-#-----------------------------------------------------------------------------
-
 from IPython.core.display import HTML
 import copy
 
@@ -158,9 +150,8 @@ class IpyTable(object):
                 self._set_cell_style_norender(row, column, **style_args)
         return self._render_update()
 
-    def render(self):
-        """Render the table.  Return an iPython IPython.core.display object."""
-
+    def get_table_html(self):
+        """Returns the raw html version of the table (as a text string)"""
         #---------------------------------------
         # Generate TABLE tag (<tr>)
         #---------------------------------------
@@ -198,6 +189,11 @@ class IpyTable(object):
                     # Append cell
                     html += '<td' + style_html + '>' + item_html + '</td>'
             html += '</tr>'
+        return html
+
+    def render(self):
+        """Render the table.  Return an iPython IPython.core.display object."""
+        html = self.get_table_html()
         if self._debug:
             print html
         return HTML(html)
@@ -417,6 +413,10 @@ def apply_theme(style_name):
     """
     global _TABLE
     return _TABLE.apply_theme(style_name)
+
+
+def get_table_html():
+    return _TABLE.get_table_html()
 
 
 def render():
