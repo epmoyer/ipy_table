@@ -59,7 +59,7 @@ from IPython.core.display import HTML
 import copy
 
 
-__version__ = 1.08
+__version__ = 1.09
 
 # Private table object used for interactive mode
 _TABLE = None
@@ -250,7 +250,7 @@ class IpyTable(object):
         """
         styles = self._cell_styles[row][column]
         for (new_key, new_value) in cell_style.items():
-            if (new_key in ['border', 'no_border']) and (new_key in styles):
+            if (new_key in ['thick_border', 'no_border']) and (new_key in styles):
                 # Merge the two border lists
                 old_borders = self._split_by_comma(styles[new_key])
                 new_borders = self._split_by_comma(new_value)
