@@ -12,6 +12,8 @@ Overview
 
 ipy_table is a support module for . ipy_table is an independent project and is not an official component of the IPython package.
 
+The home page for ipy_table is http://epmoyer.github.com/ipy_table/
+
 ipy_table is maintained at http://github.com/epmoyer/ipy_table
 
 ipython is maintained at http://github.com/ipython, and documentation is available from http://ipython.org/
