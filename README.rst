@@ -10,7 +10,7 @@ ipy_table
 Overview
 ========
 
-ipy_table is a support module for creating formatted tables in an IPython Notebook. ipy_table is an independent project and is not an official component of the IPython package.
+ipy_table is a support module for . ipy_table is an independent project and is not an official component of the IPython package.
 
 ipy_table is maintained at http://github.com/epmoyer/ipy_table
 
@@ -38,7 +38,9 @@ IPython qtconsole operation is not currently officially supported.  ipy_table re
 Installation
 ============
 
-Copy ipy_table.py and the documentation notebooks (ipy_table-Introduction.ipynb and ipy_table-Reference.ipynb) to your main IPython notebook working directory (the directory where your IPython notebooks are stored).
+1) Run 'python setup.py install'.
+
+2) Copy the documentation notebooks (ipy_table-Introduction.ipynb and ipy_table-Reference.ipynb) to your main IPython notebook working directory (the directory where your IPython notebooks are stored).
 
 If you don't know your IPython notebook working directory, start the IPython Notebook server, create a blank notebook, and execute the command 'pwd'.
 

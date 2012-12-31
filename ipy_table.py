@@ -59,7 +59,7 @@ from IPython.core.display import HTML
 import copy
 
 
-__version__ = 1.09
+__version__ = 1.11
 
 # Private table object used for interactive mode
 _TABLE = None
@@ -71,12 +71,15 @@ _TABLE = None
 
 class IpyTable(object):
 
+    _valid_borders = {'left', 'right', 'top', 'bottom', 'all'}
+
     #---------------------------------
     # External methods
     #---------------------------------
 
     def __init__(self, array, interactive=False, debug=False):
         self.array = array
+
         self._interactive = interactive
         self._debug = debug
 
@@ -235,12 +238,27 @@ class IpyTable(object):
     def _build_style_dict(self, **style_args):
         """Returns a cell style dictionary based on the style arguments."""
         style_dict = copy.deepcopy(style_args)
-        if 'thick_border' in style_dict:
-            if style_dict['thick_border'] == 'all':
-                style_dict['thick_border'] = 'left,right,top,bottom'
-        if 'no_border' in style_dict:
-            if style_dict['no_border'] == 'all':
-                style_dict['no_border'] = 'left,right,top,bottom'
+        for border_type in ['thick_border', 'no_border']:
+            if border_type in style_dict:
+                border_setting = style_dict[border_type]
+
+                # Type checking
+                if type(border_setting) != str:
+                    raise TypeError(
+                        ('%s must be a string of comma ' % border_type) +
+                        'separated border names (e.g. "left,right")')
+                # Value checking
+                if (set(border_setting.replace(' ', '').split(',')) -
+                        IpyTable._valid_borders):
+                    raise ValueError(
+                        ('%s must be a string of comma ' % border_type) +
+                        'separated border names (e.g. "left,right"). Valid ' +
+                        'border names: %s' %
+                        str(IpyTable._valid_borders))
+                # Substitute all edges for 'all'
+                if border_setting == 'all':
+                    style_dict[border_type] = 'left,right,top,bottom'
+
         return style_dict
 
     def _merge_cell_style(self, row, column, cell_style):
