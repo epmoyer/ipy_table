@@ -5,7 +5,7 @@
 ipy_table is licensed under the terms of the Modified BSD License (also known as
 New or Revised BSD), as follows:
 
-Copyright (c) 2012,2013, Eric Moyer <eric@lemoncrab.com>
+Copyright (c) 2012-2013, Eric Moyer <eric@lemoncrab.com>
 
 All rights reserved.
 
@@ -65,7 +65,7 @@ With this in mind, the following banner should be used in any source code file
 to indicate the copyright and license terms:
 
 #-----------------------------------------------------------------------------
-# Copyright (c) 2012,2013, ipy_table Development Team.
+# Copyright (c) 2012-2013, ipy_table Development Team.
 #
 # Distributed under the terms of the Modified BSD License.
 #

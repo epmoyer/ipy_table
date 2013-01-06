@@ -46,21 +46,7 @@ Design goals:
       HTML row styles and table styles are never manipulated).
 
 ---------------------------------------------------------------------------
-Revision history
-1.11  Initial GitHub release
-1.12  Adopt the standard IPython display protocol.  Instead of returning
-      an Ipython.core.display.HTML object, add the _repr_html_() method
-      to the IpyTable class.
-
-      Remove the get_table_html() method (no longer necessary; the table
-      HTML can now be obtained by calling _repr_html_() explicitly.)
-
-      Remove the render() method from IpyTable (no longer necessary).
-
-      Remove the get_table_html() function (no longer necessary, can call
-      render()._repr_html() in interactive mode)
----------------------------------------------------------------------------
-Copyright (c) 2012,2013, ipy_table Development Team.
+Copyright (c) 2012-2013, ipy_table Development Team.
 
 Distributed under the terms of the Modified BSD License.
 
@@ -465,12 +451,26 @@ def apply_theme(style_name):
 
 
 def render():
-    """Render the table.  Returns the global IpyTable object instance"""
+    """Render the current table.  Returns the global IpyTable object instance"""
     global _TABLE
     return _TABLE
 
 
 def get_interactive_return_value():
+    """Generates the return value for all interactive functions.
+
+    The interactive functions (make_table(), set_cell_style(), etc.) can
+    be used instead of the class interface to build up a table and
+    interactively modify it's style, rendering the new table on each call.
+
+    By default all interactive functions return the working global
+    IpyTable object (_TABLE), which typically gets rendered by IPython.
+    That behavior can be suppressed by setting interactive=False
+    when creating a new table with make_table() or tabulate().  If
+    interactive rendering is suppressed then all interactive functions will
+    return None, and rendering can be achieved explicitly by calling
+    render() (which will always return the working global IpyTable object).
+    """
     global _INTERACTIVE
     global _TABLE
     if _INTERACTIVE:

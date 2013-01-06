@@ -1,5 +1,5 @@
 :author: `Eric Moyer`_
-:copyright: Copyright © 2012,2013 Eric Moyer <eric@lemoncrab.com>
+:copyright: Copyright © 2012-2013 Eric Moyer <eric@lemoncrab.com>
 :license: Modified BSD 
 
 #########
@@ -47,5 +47,24 @@ Installation
 2) Copy the documentation notebooks (ipy_table-Introduction.ipynb and ipy_table-Reference.ipynb) to your main IPython notebook working directory (the directory where your IPython notebooks are stored).
 
 If you don't know your IPython notebook working directory, start the IPython Notebook server, create a blank notebook, and execute the command 'pwd'.
+
+Revision History
+================
+1.11
+  Initial GitHub release
+
+1.12
+  Adopt the standard IPython display protocol.  Instead of returning
+  an Ipython.core.display.HTML object, add the _repr_html_() method
+  to the IpyTable class.
+
+  Remove the get_table_html() method (no longer necessary; the table
+  HTML can now be obtained by calling _repr_html_() explicitly).
+
+  Remove the render() method from IpyTable (no longer necessary).
+
+  Remove the get_table_html() function (no longer necessary; can call
+  render()._repr_html() in interactive mode).
+
 
 .. _`Eric Moyer`: mailto:eric@lemoncrab.com
