@@ -1,5 +1,5 @@
 :author: `Eric Moyer`_
-:copyright: Copyright © 2012 Eric Moyer <eric@lemoncrab.com>
+:copyright: Copyright © 2012,2013 Eric Moyer <eric@lemoncrab.com>
 :license: Modified BSD 
 
 #########
@@ -25,8 +25,10 @@ Documentation is provided by the documentation notebooks supplied with this pack
 
     ipy_table-Introduction.ipynb
     ipy_table-Reference.ipynb
-    
-PDF versions have also been provided for easy reference.
+
+The documentation notebooks can be viewed online with nbviewer at:
+http://nbviewer.ipython.org/urls/raw.github.com/epmoyer/ipy_table/master/ipy_table-Introduction.ipynb    
+http://nbviewer.ipython.org/urls/raw.github.com/epmoyer/ipy_table/master/ipy_table-Reference.ipynb    
 
 Dependencies and Supported Python Versions
 ==========================================
