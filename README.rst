@@ -26,9 +26,7 @@ Documentation is provided by the documentation notebooks supplied with this pack
     ipy_table-Introduction.ipynb
     ipy_table-Reference.ipynb
 
-The documentation notebooks can be viewed online with nbviewer at:
-http://nbviewer.ipython.org/urls/raw.github.com/epmoyer/ipy_table/master/ipy_table-Introduction.ipynb    
-http://nbviewer.ipython.org/urls/raw.github.com/epmoyer/ipy_table/master/ipy_table-Reference.ipynb    
+The documentation notebooks can be viewed online with nbviewer at Introduction_ and Reference_.
 
 Dependencies and Supported Python Versions
 ==========================================
@@ -68,3 +66,5 @@ Revision History
 
 
 .. _`Eric Moyer`: mailto:eric@lemoncrab.com
+.. _Introduction: http://nbviewer.ipython.org/urls/raw.github.com/epmoyer/ipy_table/master/ipy_table-Introduction.ipynb 
+.. _Reference: http://nbviewer.ipython.org/urls/raw.github.com/epmoyer/ipy_table/master/ipy_table-Reference.ipynb    
