@@ -1,6 +1,6 @@
 """Table formatting package for IP[y] Notebooks
 
-Copyright (c) 2012, ipy_table Development Team.
+Copyright (c) 2012-2013, ipy_table Development Team.
 
 Distributed under the terms of the Modified BSD License.
 
@@ -30,6 +30,6 @@ setup(
         ],
 
     name="ipy_table",
-    version="1.11",
+    version="1.12",
     py_modules=["ipy_table"],
 )
