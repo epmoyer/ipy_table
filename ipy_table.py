@@ -149,6 +149,7 @@ class IpyTable(object):
                     # Append cell
                     html += '<td' + style_html + '>' + item_html + '</td>'
             html += '</tr>'
+        html += '</table>'
         return html
 
     @property
