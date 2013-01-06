@@ -46,7 +46,21 @@ Design goals:
       HTML row styles and table styles are never manipulated).
 
 ---------------------------------------------------------------------------
-Copyright (c) 2012, ipy_table Development Team.
+Revision history
+1.11  Initial GitHub release
+1.12  Adopt the standard IPython display protocol.  Instead of returning
+      an Ipython.core.display.HTML object, add the _repr_html_() method
+      to the IpyTable class.
+
+      Remove the get_table_html() method (no longer necessary; the table
+      HTML can now be obtained by calling _repr_html_() explicitly.)
+
+      Remove the render() method from IpyTable (no longer necessary).
+
+      Remove the get_table_html() function (no longer necessary, can call
+      render()._repr_html() in interactive mode)
+---------------------------------------------------------------------------
+Copyright (c) 2012,2013, ipy_table Development Team.
 
 Distributed under the terms of the Modified BSD License.
 
@@ -55,14 +69,14 @@ The full license is in the file COPYING.txt, distributed with this software.
 This project is maintained at http://github.com/epmoyer/ipy_table
 """
 
-from IPython.core.display import HTML
 import copy
 
 
-__version__ = 1.11
+__version__ = 1.12
 
 # Private table object used for interactive mode
 _TABLE = None
+_INTERACTIVE = True
 
 #-----------------------------
 # Classes
@@ -77,11 +91,8 @@ class IpyTable(object):
     # External methods
     #---------------------------------
 
-    def __init__(self, array, interactive=False, debug=False):
+    def __init__(self, array):
         self.array = array
-
-        self._interactive = interactive
-        self._debug = debug
 
         self._num_rows = len(array)
         self._num_columns = len(array[0])
@@ -95,69 +106,12 @@ class IpyTable(object):
                               for dummy in range(self._num_columns)]
                              for dummy2 in range(self._num_rows)]
 
-    @property
-    def themes(self):
-        """Get list of supported formatting themes."""
-        return ['basic', 'basic_left', 'basic_both']
+    def _repr_html_(self):
+        """IPython display protocol: HTML representation.
 
-    def apply_theme(self, theme_name):
-        """Apply a formatting theme to the entire table.
-
-        The list of available themes is returned by the .themes property.
+        The IPython display protocol calls this method to get the HTML
+        representation of this object.
         """
-
-        if theme_name in self.themes:
-            # Color rows in alternating colors
-            for row in range(len(self.array)):
-                if row % 2:
-                    self.set_row_style(row, color='Ivory')
-                else:
-                    self.set_row_style(row, color='AliceBlue')
-            # Color column header
-            if not theme_name == 'basic_left':
-                self.set_row_style(0, bold=True, color='LightGray')
-            # Color row header
-            if not theme_name == 'basic':
-                self.set_column_style(0, bold=True, color='LightGray')
-            # Remove upper left corner cell (make white with no left
-            # and no top border)
-            if theme_name == 'basic_both':
-                self.set_cell_style(0, 0, color='White', no_border='left,top')
-        else:
-            raise ValueError('Unknown theme "%s". Expected one of %s.' %
-                             (theme_name, str(self.themes)))
-
-        return self._render_update()
-
-    def set_cell_style(self, row, column, **style_args):
-        """Apply style(s) to a single cell."""
-        self._range_check(row=row, column=column)
-        self._set_cell_style_norender(row, column, **style_args)
-        return self._render_update()
-
-    def set_row_style(self, row, **style_args):
-        """Apply style(s) to a table row."""
-        self._range_check(row=row)
-        for column in range(self._num_columns):
-            self._set_cell_style_norender(row, column, **style_args)
-        return self._render_update()
-
-    def set_column_style(self, column, **style_args):
-        """Apply style(s) to  a table column."""
-        self._range_check(column=column)
-        for row in range(self._num_rows):
-            self._set_cell_style_norender(row, column, **style_args)
-        return self._render_update()
-
-    def set_global_style(self, **style_args):
-        """Apply style(s) to all table cells."""
-        for row in range(self._num_rows):
-            for column in range(self._num_columns):
-                self._set_cell_style_norender(row, column, **style_args)
-        return self._render_update()
-
-    def get_table_html(self):
-        """Returns the raw html version of the table (as a text string)"""
         #---------------------------------------
         # Generate TABLE tag (<tr>)
         #---------------------------------------
@@ -197,6 +151,61 @@ class IpyTable(object):
             html += '</tr>'
         return html
 
+    @property
+    def themes(self):
+        """Get list of supported formatting themes."""
+        return ['basic', 'basic_left', 'basic_both']
+
+    def apply_theme(self, theme_name):
+        """Apply a formatting theme to the entire table.
+
+        The list of available themes is returned by the .themes property.
+        """
+
+        if theme_name in self.themes:
+            # Color rows in alternating colors
+            for row in range(len(self.array)):
+                if row % 2:
+                    self.set_row_style(row, color='Ivory')
+                else:
+                    self.set_row_style(row, color='AliceBlue')
+            # Color column header
+            if not theme_name == 'basic_left':
+                self.set_row_style(0, bold=True, color='LightGray')
+            # Color row header
+            if not theme_name == 'basic':
+                self.set_column_style(0, bold=True, color='LightGray')
+            # Remove upper left corner cell (make white with no left
+            # and no top border)
+            if theme_name == 'basic_both':
+                self.set_cell_style(0, 0, color='White', no_border='left,top')
+        else:
+            raise ValueError('Unknown theme "%s". Expected one of %s.' %
+                             (theme_name, str(self.themes)))
+
+    def set_cell_style(self, row, column, **style_args):
+        """Apply style(s) to a single cell."""
+        self._range_check(row=row, column=column)
+        self._set_cell_style_norender(row, column, **style_args)
+
+    def set_row_style(self, row, **style_args):
+        """Apply style(s) to a table row."""
+        self._range_check(row=row)
+        for column in range(self._num_columns):
+            self._set_cell_style_norender(row, column, **style_args)
+
+    def set_column_style(self, column, **style_args):
+        """Apply style(s) to  a table column."""
+        self._range_check(column=column)
+        for row in range(self._num_rows):
+            self._set_cell_style_norender(row, column, **style_args)
+
+    def set_global_style(self, **style_args):
+        """Apply style(s) to all table cells."""
+        for row in range(self._num_rows):
+            for column in range(self._num_columns):
+                self._set_cell_style_norender(row, column, **style_args)
+
     def _range_check(self, **check_args):
         """Range check row and/or column index
 
@@ -218,22 +227,9 @@ class IpyTable(object):
                     'Bad column (%d).  Expected column in range 0 to %d.' %
                     (column, self._num_columns - 1))
 
-    def render(self):
-        """Render the table.  Return an iPython IPython.core.display object."""
-        html = self.get_table_html()
-        if self._debug:
-            print html
-        return HTML(html)
-
     #---------------------------------
     # Internal methods
     #---------------------------------
-
-    def _render_update(self):
-        """Renders the table only if in interactive mode."""
-        if(self._interactive):
-            return self.render()
-        return None
 
     def _build_style_dict(self, **style_args):
         """Returns a cell style dictionary based on the style arguments."""
@@ -394,9 +390,12 @@ class IpyTable(object):
 #-----------------------------
 
 
-def tabulate(data_list, columns, interactive=True, debug=False):
+def tabulate(data_list, columns, interactive=True):
     """Renders a list (not array) of items into an HTML table."""
     global _TABLE
+    global _INTERACTIVE
+
+    _INTERACTIVE = interactive
     total_items = len(data_list)
     rows = total_items / columns
     if total_items % columns:
@@ -412,39 +411,45 @@ def tabulate(data_list, columns, interactive=True, debug=False):
     array = [array[x:x + columns] for x in xrange(0, len(array), columns)]
 
     # Render the array
-    _TABLE = IpyTable(array, interactive=interactive, debug=debug)
-    return _TABLE._render_update()
+    _TABLE = IpyTable(array)
+    return get_interactive_return_value()
 
 
-def make_table(array, interactive=True, debug=False):
+def make_table(array, interactive=True):
     """Create a table in interactive mode."""
     global _TABLE
-    _TABLE = IpyTable(array, interactive=interactive, debug=debug)
-    return _TABLE._render_update()
+    global _INTERACTIVE
+    _TABLE = IpyTable(array)
+    _INTERACTIVE = interactive
+    return get_interactive_return_value()
 
 
 def set_cell_style(row, column, **style_args):
     """Apply style(s) to a single cell."""
     global _TABLE
-    return _TABLE.set_cell_style(row, column, **style_args)
+    _TABLE.set_cell_style(row, column, **style_args)
+    return get_interactive_return_value()
 
 
 def set_column_style(column, **style_args):
     """Apply style(s) to  a table column."""
     global _TABLE
-    return _TABLE.set_column_style(column, **style_args)
+    _TABLE.set_column_style(column, **style_args)
+    return get_interactive_return_value()
 
 
 def set_row_style(row, **style_args):
     """Apply style(s) to a table row."""
     global _TABLE
-    return _TABLE.set_row_style(row, **style_args)
+    _TABLE.set_row_style(row, **style_args)
+    return get_interactive_return_value()
 
 
 def set_global_style(**style_args):
     """Apply style(s) to all table cells."""
     global _TABLE
-    return _TABLE.set_global_style(**style_args)
+    _TABLE.set_global_style(**style_args)
+    return get_interactive_return_value()
 
 
 def apply_theme(style_name):
@@ -454,17 +459,23 @@ def apply_theme(style_name):
     an IpyTable object.
     """
     global _TABLE
-    return _TABLE.apply_theme(style_name)
-
-
-def get_table_html():
-    return _TABLE.get_table_html()
+    _TABLE.apply_theme(style_name)
+    return get_interactive_return_value()
 
 
 def render():
-    """Render the table.  Returns an iPython IPython.core.display object."""
+    """Render the table.  Returns the global IpyTable object instance"""
     global _TABLE
-    return _TABLE.render()
+    return _TABLE
+
+
+def get_interactive_return_value():
+    global _INTERACTIVE
+    global _TABLE
+    if _INTERACTIVE:
+        return _TABLE
+    else:
+        return None
 
 #-----------------------------
 # Private functions
