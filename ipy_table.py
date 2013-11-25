@@ -138,6 +138,52 @@ class IpyTable(object):
         html += '</table>'
         return html
 
+    def _repr_latex_(self):
+        """IPython display protocol: LaTex representation.
+
+        The IPython display protocol calls this method to get the LaTex
+        representation of this object.
+        """
+        #---------------------------------------
+        # Begin tabular
+        #---------------------------------------
+        nCols = max([ len(row) for row in self.array ])
+        latex = '\\begin{tabular}'
+        latex += '{' + 'c|'*(nCols-1) + 'c' + '}'
+        latex += '\\hline\\hline \n'
+
+        for row, row_data in enumerate(self.array):
+
+            #---------------------------------------
+            # Generate rows
+            #---------------------------------------
+            for (column, item) in enumerate(row_data):
+                if not _key_is_valid(self._cell_styles[row][column], 'suppress'):
+                    #---------------------------------------
+                    # Generate CELL tag (<td>)
+                    #---------------------------------------
+                    # Apply floating point formatter to the cell contents
+                    # (if it is a float)
+                    item_tex = self._formatter(item, self._cell_styles[row][column], useHTML=False)
+
+                    # Add bold and italic tags if set
+                    if _key_is_valid(self._cell_styles[row][column], 'bold'):
+                        item_tex = '\\textbf{' + item_tex + '}'
+                    if _key_is_valid(self._cell_styles[row][column], 'italic'):
+                        item_tex = '\\textit{' + item_tex + '}'
+
+                    # Get html style string
+                    # style_html = self._get_style_html(self._cell_styles[row][column])
+                    # Should there be a _get_style_latex
+
+                    # Append cell
+                    latex += item_tex
+                    if column<nCols-1:
+		        latex += ' & '
+            latex += ' \\\\ \n'
+        latex += ' \\hline\\hline \n \\end{tabular}'
+        return latex
+
     @property
     def themes(self):
         """Get list of supported formatting themes."""
@@ -346,7 +392,7 @@ class IpyTable(object):
             return ' ' + style_html
         return ''
 
-    def _formatter(self, item, cell_style):
+    def _formatter(self, item, cell_style, useHTML=True):
         """Apply formating to cell contents.
 
         Applies float format to item if item is a float or float64.
@@ -363,7 +409,7 @@ class IpyTable(object):
             text = str(item)
 
         # If cell wrapping is not specified
-        if not ('wrap' in cell_style and cell_style['wrap']):
+        if not ('wrap' in cell_style and cell_style['wrap']) and useHTML:
             # Convert all spaces to non-breaking and return
             text = text.replace(' ', '&nbsp')
         return text
