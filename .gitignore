@@ -3,3 +3,8 @@
 .pydevproject
 *~
 release_images
+.ipynb_checkpoints/
+*.aux
+*.log
+*.pdf
+*.backup

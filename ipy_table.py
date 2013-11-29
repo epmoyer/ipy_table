@@ -56,7 +56,8 @@ This project is maintained at http://github.com/epmoyer/ipy_table
 """
 
 import copy
-
+from collections import Counter
+import numpy as np
 
 __version__ = 1.12
 
@@ -72,6 +73,30 @@ _INTERACTIVE = True
 class IpyTable(object):
 
     _valid_borders = {'left', 'right', 'top', 'bottom', 'all'}
+
+    # could / should be global
+    # Map style alignment to number
+    ALIGN_NUM = { 'left': 0,
+                 'right': 1,
+                'centre': 2 }
+    
+    # Map number alignments to latex styles
+    ALIGN_TEX = { 0: 'l',
+                  1: 'r',
+                  2: 'c' }
+    
+    # Map style borders to numbers
+    BORDER_NUM = { 'single_border': 0,
+		       'no_border': 1,
+                    'thick_border': 2,
+                    'double_thick': 3 }
+
+    # Map number borders to latex vertical border styles
+    VBORDER_TEX = { 0: '|',
+                   1: ' ',
+                   2: '!{\\vrule width 1pt}',
+                   3: '!{\\vrule width 2pt}' } # Double thick line for first and last columns
+
 
     #---------------------------------
     # External methods
@@ -144,16 +169,41 @@ class IpyTable(object):
         The IPython display protocol calls this method to get the LaTex
         representation of this object.
         """
+
+        latex = ''
+        if not hasattr(self, '_has_latex_macros'):
+            print 'WARNING: include \\usepackage{array} on latex template\n'
+            latex += '% Some macros could be added the first time table is created\n'
+            latex += '\\newlength{\\Oldarrayrulewidth}\n'
+            latex += '\\newcommand{\\thickline}[2]{%\n'
+            latex += '  \\noalign{\\global\\setlength{\\Oldarrayrulewidth}{\\arrayrulewidth}}%\n'
+            latex += '  \\noalign{\\global\\setlength{\\arrayrulewidth}{#1}}\\cline{#2}%\n'
+            latex += '  \\noalign{\\global\\setlength{\\arrayrulewidth}{\Oldarrayrulewidth}}}\n'
+            
+            latex += '\n'
+            self._has_latex_macros = True
+
+
         #---------------------------------------
         # Begin tabular
         #---------------------------------------
-        nCols = max([ len(row) for row in self.array ])
-        latex = '\\begin{tabular}'
-        latex += '{' + 'c|'*(nCols-1) + 'c' + '}'
-        latex += '\\hline\\hline \n'
+        latex += '\\begin{tabular}'
+
+        cell_align = self._build_align_matrix()
+        cell_vBorder = self._build_vborder_matrix()
+        pref_align = [ _get_most_common(cell_align[:,i]) for i in range(self._num_columns) ]
+        pref_border = [ _get_most_common(cell_vBorder[:,i]) for i in range(self._num_columns+1) ]
+        
+        cell_hBorder = self._build_hborder_matrix()
+
+
+        latex += '{'
+        for i in range(self._num_columns):
+            latex += self.VBORDER_TEX[pref_border[i]] + self.ALIGN_TEX[pref_align[i]]
+        latex += self.VBORDER_TEX[pref_border[-1]]
+        latex += '}\n' + self._build_line_separator(cell_hBorder[0,:])
 
         for row, row_data in enumerate(self.array):
-
             #---------------------------------------
             # Generate rows
             #---------------------------------------
@@ -176,13 +226,127 @@ class IpyTable(object):
                     # style_html = self._get_style_html(self._cell_styles[row][column])
                     # Should there be a _get_style_latex
 
+                    if 'row_span' in self._cell_styles[row][column]:
+                        row_span = str(self._cell_styles[row][column]['row_span'])
+                        item_tex = '\\multirow{' + row_span + '}{*}{' + item_tex + '}'
+
+                    if cell_align[row,column] != pref_align[column] or cell_vBorder[row,column] != pref_border[column] or cell_vBorder[row,column+1] != pref_border[column+1]:
+                        cell_format = self.VBORDER_TEX[cell_vBorder[row,column]] + self.ALIGN_TEX[cell_align[row,column]] + self.VBORDER_TEX[cell_vBorder[row,column+1]]
+                        item_tex = '\\multicolumn{1}{' + cell_format + '}{' + item_tex + '}'
+
                     # Append cell
                     latex += item_tex
-                    if column<nCols-1:
-		        latex += ' & '
-            latex += ' \\\\ \n'
-        latex += ' \\hline\\hline \n \\end{tabular}'
+                if column<self._num_columns-1:
+                    latex += ' & '
+
+            latex += ' \\\\  '
+            latex += self._build_line_separator(cell_hBorder[row+1,:])
+            latex += '\n'
+        latex += '\\end{tabular}'
+
         return latex
+
+    def _build_line_separator(self, col_borders):
+        style_changes = np.nonzero(abs(np.diff(col_borders)))[0] + 1
+    
+        style = col_borders[0]
+        prev_idx = 0
+    
+        styles = []
+        for idx in style_changes:
+            styles.append((style,prev_idx,idx))
+            style = col_borders[idx]
+            prev_idx = idx
+        styles.append((style,prev_idx,len(col_borders)))
+    
+        clines = ''
+        for style,col0,coln in styles:
+            if style == self.BORDER_NUM['single_border']:
+                clines += '\\cline{%d-%d}'%(col0+1,coln)
+            elif style == self.BORDER_NUM['no_border']:
+                # Nothing to do for no-border
+                pass
+            elif style == self.BORDER_NUM['thick_border']:
+                clines += '\\thickline{2pt}{%d-%d}'%(col0+1,coln)
+        return clines
+
+    def _build_align_matrix(self):
+        aligns = np.zeros((self._num_rows,self._num_columns))
+        for col in range(self._num_columns):
+            for row in range(self._num_rows):
+                if 'align' in self._cell_styles[row][col]:
+                    align = self._cell_styles[row][col]['align']
+                    aligns[row,col] = self.ALIGN_NUM[align]
+                else:
+                    # The default align
+                    aligns[row,col] = self.ALIGN_NUM['left']
+        return aligns
+
+    def _build_vborder_matrix(self):
+        # Vertical borders
+        # By default, unless otherwise specified, border is single_border
+        v_borders = np.zeros((self._num_rows,self._num_columns + 1))
+        for col in range(self._num_columns):
+            for row in range(self._num_rows):
+                if 'thick_border' in self._cell_styles[row][col]:
+                    side = self._cell_styles[row][col]['thick_border']
+                    if 'left' in side:
+                        v_borders[row,col] = self.BORDER_NUM['thick_border']
+                    if 'right' in side and col>0:
+                        v_borders[row,col+1] = self.BORDER_NUM['thick_border']
+                if 'no_border' in self._cell_styles[row][col]:
+                    side = self._cell_styles[row][col]['no_border']
+                    if 'left' in side:
+                        v_borders[row,col] = self.BORDER_NUM['no_border']
+                    if 'right' in side and col>0:
+                        v_borders[row,col+1] = self.BORDER_NUM['no_border']
+
+        # Make first and last columns with thick border have double thickness
+        # this compensates that central cells gets 'thick border' from left and right
+        first = v_borders[:,0]
+        first[first==self.BORDER_NUM['thick_border']] = self.BORDER_NUM['double_thick']
+        last = v_borders[:,-1]
+        last[last==self.BORDER_NUM['thick_border']] = self.BORDER_NUM['double_thick']
+
+        return v_borders
+
+    def _build_hborder_matrix(self):
+        # Horizontal borders
+        # By default, unless otherwise specified, border is single_border
+        h_borders = np.zeros((self._num_rows + 1,self._num_columns))
+        for col in range(self._num_columns):
+            for row in range(self._num_rows):
+                if 'thick_border' in self._cell_styles[row][col]:
+                    side = self._cell_styles[row][col]['thick_border']
+                    if 'top' in side:
+                        h_borders[row,col] = self.BORDER_NUM['thick_border']
+                    if 'bottom' in side and col>0:
+                        h_borders[row+1,col] = self.BORDER_NUM['thick_border']
+                if 'no_border' in self._cell_styles[row][col]:
+                    side = self._cell_styles[row][col]['no_border']
+                    if 'top' in side:
+                        h_borders[row,col] = self.BORDER_NUM['no_border']
+                    if 'bottom' in side and col>0:
+                        h_borders[row+1,col] = self.BORDER_NUM['no_border']
+                if 'row_span' in self._cell_styles[row][col]:
+                    nrows = self._cell_styles[row][col]['row_span']
+                    for i in range(nrows-1):
+                        h_borders[row+i+1,col] = self.BORDER_NUM['no_border']
+
+        return h_borders
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @property
     def themes(self):
@@ -527,6 +691,11 @@ def get_interactive_return_value():
 #-----------------------------
 # Private functions
 #-----------------------------
+
+def _get_most_common(data):
+    ctr = Counter(data)
+    choice, times = ctr.most_common()[0]
+    return choice
 
 
 def _convert_to_list(data):
