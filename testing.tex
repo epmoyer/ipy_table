@@ -3,12 +3,14 @@
 \usepackage{array}
 \usepackage{multirow}
 
+\usepackage{xcolor,colortbl}
+
+
 %opening
 \title{}
 \author{}
 
 \begin{document}
-
 % Some macros could be added the first time table is created
 \newlength{\Oldarrayrulewidth}
 \newcommand{\thickline}[2]{%
@@ -16,13 +18,15 @@
   \noalign{\global\setlength{\arrayrulewidth}{#1}}\cline{#2}%
   \noalign{\global\setlength{\arrayrulewidth}{\Oldarrayrulewidth}}}
 
-\begin{tabular}{|l|l|l|l|}
-\cline{1-2}\cline{4-4} & Heading 1 & Heading 2 & Heading 3 \\  \cline{1-4}
-Row1 & \multirow{3}{*}{xxxxxxxxx} & y & zzzzzzzzzzzzzzzzzzzz \\  \cline{1-1}\cline{4-4}
-Row2 &  & ipython & tables! \\  \cline{1-1}\cline{4-4}
-Row3 &  & 1.7820 & 0.9910 \\  \cline{1-4}
+\definecolor{LightGray}{rgb}{0.75,0.75,0.75}
+\definecolor{Pink}{rgb}{1,0.75,0.75}
+\definecolor{Cyan}{rgb}{0,1,1}
+
+\begin{tabular}{|>{\columncolor{Cyan}}l|l|l|l|}
+\cline{1-4} & Heading 1 & Heading 2 & Heading 3 \\  \hline
+Row1 & xxxxxxxxx & y & zzzzzzzzzzzzzzzzzzzz \\  \cline{1-4}
+Row2 & Hello & ipython & tables! \\  \cline{1-4}
+Row3 & 3.1426 & 1.7820 & 0.9910 \\  \cline{1-4}
 Row4 & Number & 10.2000 & 10 \\  \cline{1-4}
 \end{tabular}
-
-
 \end{document}

@@ -79,15 +79,20 @@ class IpyTable(object):
     ALIGN_NUM = { 'left': 0,
                  'right': 1,
                 'centre': 2 }
-    
+
     # Map number alignments to latex styles
     ALIGN_TEX = { 0: 'l',
                   1: 'r',
                   2: 'c' }
-    
+
+    # Map number alignments to latex styles (which support width)
+    ALIGN_TEX_WIDTH = { 0: 'L',
+                        1: 'R',
+                        2: 'C' }
+
     # Map style borders to numbers
     BORDER_NUM = { 'single_border': 0,
-		       'no_border': 1,
+                       'no_border': 1,
                     'thick_border': 2,
                     'double_thick': 3 }
 
@@ -97,6 +102,26 @@ class IpyTable(object):
                    2: '!{\\vrule width 1pt}',
                    3: '!{\\vrule width 2pt}' } # Double thick line for first and last columns
 
+    # Map color to numbers
+    COLOR_NUM = { 'Ivory': 1,
+              'AliceBlue': 2,
+              'LightGray': 3,
+                   'Pink': 4,
+                   'Cyan': 5 }
+
+    # Map number colours to latex colour definitions
+    COLOR_TEXDEF = { 1: '\\definecolor{Ivory}{rgb}{1,1,0}', # 'Ivory'
+                  2: '\\definecolor{AliceBlue}{rgb}{0.94,0.95,1}', # 'AliceBlue'
+                  3: '\\definecolor{LightGray}{rgb}{0.75,0.75,0.75}', # 'LightGray'
+                  4: '\\definecolor{Pink}{rgb}{1,0.75,0.75}', # 'Pink'
+                  5: '\\definecolor{Cyan}{rgb}{0,1,1}' }# 'Cyan'}
+
+    # Map number colours to latex colour styles
+    COLOR_TEX = { 1: 'Ivory',
+                  2: 'AliceBlue',
+                  3: 'LightGray',
+                  4: 'Pink',
+                  5: 'Cyan' }
 
     #---------------------------------
     # External methods
@@ -170,8 +195,21 @@ class IpyTable(object):
         representation of this object.
         """
 
+        cell_align = self._build_align_matrix()
+        cell_vBorder = self._build_vborder_matrix()
+        cell_hBorder = self._build_hborder_matrix()
+        cell_colors = self._build_color_matrix()
+
+        pref_width = self._build_width_matrix()
+        pref_align = [ _get_most_common(cell_align[:,i]) for i in range(self._num_columns) ]
+        pref_border = [ _get_most_common(cell_vBorder[:,i]) for i in range(self._num_columns+1) ]
+        pref_vColor = [ _get_most_common(cell_colors[:,i]) for i in range(self._num_columns) ]
+        pref_hColor = [ _get_most_common(cell_colors[i,:]) for i in range(self._num_rows) ]
+
         latex = ''
         if not hasattr(self, '_has_latex_macros'):
+            self._has_latex_macros = True
+
             print 'WARNING: include \\usepackage{array} on latex template\n'
             latex += '% Some macros could be added the first time table is created\n'
             latex += '\\newlength{\\Oldarrayrulewidth}\n'
@@ -179,27 +217,36 @@ class IpyTable(object):
             latex += '  \\noalign{\\global\\setlength{\\Oldarrayrulewidth}{\\arrayrulewidth}}%\n'
             latex += '  \\noalign{\\global\\setlength{\\arrayrulewidth}{#1}}\\cline{#2}%\n'
             latex += '  \\noalign{\\global\\setlength{\\arrayrulewidth}{\Oldarrayrulewidth}}}\n'
-            
             latex += '\n'
-            self._has_latex_macros = True
 
+            if pref_width.max()>0:
+                # These macros are required only if fixed column width is used
+                latex += '\\newcolumntype{L}[1]{>{\\raggedright\\let\\newline\\\\\\arraybackslash\\hspace{0pt}}m{#1}}\n'
+                latex += '\\newcolumntype{C}[1]{>{\\centering\\let\\newline\\\\\\arraybackslash\\hspace{0pt}}m{#1}}\n'
+                latex += '\\newcolumntype{R}[1]{>{\\raggedleft\\let\\newline\\\\\\arraybackslash\\hspace{0pt}}m{#1}}\n'
+                latex += '\n'
+
+            if cell_colors.sum()>0:
+                for colorNum in np.unique(cell_colors):
+                    if colorNum > 0:
+                        latex += self.COLOR_TEXDEF[colorNum] + '\n'
+                latex += '\n'
 
         #---------------------------------------
         # Begin tabular
         #---------------------------------------
         latex += '\\begin{tabular}'
-
-        cell_align = self._build_align_matrix()
-        cell_vBorder = self._build_vborder_matrix()
-        pref_align = [ _get_most_common(cell_align[:,i]) for i in range(self._num_columns) ]
-        pref_border = [ _get_most_common(cell_vBorder[:,i]) for i in range(self._num_columns+1) ]
-        
-        cell_hBorder = self._build_hborder_matrix()
-
-
         latex += '{'
         for i in range(self._num_columns):
-            latex += self.VBORDER_TEX[pref_border[i]] + self.ALIGN_TEX[pref_align[i]]
+            if pref_vColor[i]>0:
+                color = '>{\\columncolor{' + self.COLOR_TEX[pref_vColor[i]] + '}}'
+            else:
+                color = ''
+            if pref_width[i]<0:
+                latex += self.VBORDER_TEX[pref_border[i]] + color + self.ALIGN_TEX[pref_align[i]]
+            else:
+	        latex += self.VBORDER_TEX[pref_border[i]] + color + self.ALIGN_TEX_WIDTH[pref_align[i]]
+	        latex += '{' + str(pref_width[i]) + 'px}'
         latex += self.VBORDER_TEX[pref_border[-1]]
         latex += '}\n' + self._build_line_separator(cell_hBorder[0,:])
 
@@ -207,6 +254,7 @@ class IpyTable(object):
             #---------------------------------------
             # Generate rows
             #---------------------------------------
+            skip_col_div = 0
             for (column, item) in enumerate(row_data):
                 if not _key_is_valid(self._cell_styles[row][column], 'suppress'):
                     #---------------------------------------
@@ -231,13 +279,22 @@ class IpyTable(object):
                         item_tex = '\\multirow{' + row_span + '}{*}{' + item_tex + '}'
 
                     if cell_align[row,column] != pref_align[column] or cell_vBorder[row,column] != pref_border[column] or cell_vBorder[row,column+1] != pref_border[column+1]:
+                        if 'column_span' in self._cell_styles[row][column]:
+                            nCols = self._cell_styles[row][column]['column_span']
+                            skip_col_div = nCols-1
+                            nCols = str(nCols)
+                        else:
+                            nCols = '1'
+
                         cell_format = self.VBORDER_TEX[cell_vBorder[row,column]] + self.ALIGN_TEX[cell_align[row,column]] + self.VBORDER_TEX[cell_vBorder[row,column+1]]
-                        item_tex = '\\multicolumn{1}{' + cell_format + '}{' + item_tex + '}'
+                        item_tex = '\\multicolumn{' + nCols + '}{' + cell_format + '}{' + item_tex + '}'
 
                     # Append cell
                     latex += item_tex
-                if column<self._num_columns-1:
+                if column<self._num_columns-1 and skip_col_div==0:
                     latex += ' & '
+                elif skip_col_div>0:
+                    skip_col_div -= 1
 
             latex += ' \\\\  '
             latex += self._build_line_separator(cell_hBorder[row+1,:])
@@ -288,18 +345,23 @@ class IpyTable(object):
         v_borders = np.zeros((self._num_rows,self._num_columns + 1))
         for col in range(self._num_columns):
             for row in range(self._num_rows):
+                if 'column_span' in self._cell_styles[row][col]:
+                    span_offset = self._cell_styles[row][col]['column_span']
+                else:
+                    span_offset = 0
+
                 if 'thick_border' in self._cell_styles[row][col]:
                     side = self._cell_styles[row][col]['thick_border']
                     if 'left' in side:
                         v_borders[row,col] = self.BORDER_NUM['thick_border']
                     if 'right' in side and col>0:
-                        v_borders[row,col+1] = self.BORDER_NUM['thick_border']
+                        v_borders[row,col+span_offset] = self.BORDER_NUM['thick_border']
                 if 'no_border' in self._cell_styles[row][col]:
                     side = self._cell_styles[row][col]['no_border']
                     if 'left' in side:
                         v_borders[row,col] = self.BORDER_NUM['no_border']
                     if 'right' in side and col>0:
-                        v_borders[row,col+1] = self.BORDER_NUM['no_border']
+                        v_borders[row,col+span_offset] = self.BORDER_NUM['no_border']
 
         # Make first and last columns with thick border have double thickness
         # this compensates that central cells gets 'thick border' from left and right
@@ -335,18 +397,28 @@ class IpyTable(object):
 
         return h_borders
 
+    def _build_width_matrix(self):
+        # Column width -1 means 'no width set'
+        c_widths = np.ones(self._num_columns) * -1
+        for col in range(self._num_columns):
+            for row in range(self._num_rows):
+                if 'width' in self._cell_styles[row][col]:
+                    width = np.double(self._cell_styles[row][col]['width'])
+                    # Conversion factor: Browsers tend to use 72 DPI while LaTeX tends to use 96 DPI
+                    width = width * 72 / 96
+                    c_widths[col] = max([ c_widths[col] , width ])
+        return c_widths
 
-
-
-
-
-
-
-
-
-
-
-
+    def _build_color_matrix(self):
+        # Column width -1 means 'no width set'
+        colors = np.zeros((self._num_rows,self._num_columns))
+        for col in range(self._num_columns):
+            for row in range(self._num_rows):
+                if 'color' in self._cell_styles[row][col]:
+                    # Somehow convert HTML color style to a number
+                    color = self.COLOR_NUM[self._cell_styles[row][col]['color']]
+                    colors[row][col] = color
+        return colors
 
     @property
     def themes(self):
