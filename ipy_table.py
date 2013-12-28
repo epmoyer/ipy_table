@@ -347,7 +347,7 @@ class IpyTable(object):
         return ''
 
     def _formatter(self, item, cell_style):
-        """Apply formating to cell contents.
+        """Apply formatting to cell contents.
 
         Applies float format to item if item is a float or float64.
         Converts spaces to non-breaking if wrap is not enabled.
@@ -360,7 +360,10 @@ class IpyTable(object):
                 and 'float_format' in cell_style):
             text = cell_style['float_format'] % item
         else:
-            text = str(item)
+            if type(item) == unicode:
+                text = item
+            else:
+                text = str(item)
 
         # If cell wrapping is not specified
         if not ('wrap' in cell_style and cell_style['wrap']):
