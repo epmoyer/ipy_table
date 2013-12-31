@@ -59,7 +59,8 @@ import copy
 from collections import Counter
 import numpy as np
 
-__version__ = 1.12
+
+__version__ = 1.13
 
 # Private table object used for interactive mode
 _TABLE = None
@@ -642,7 +643,10 @@ class IpyTable(object):
                 and 'float_format' in cell_style):
             text = cell_style['float_format'] % item
         else:
-            text = str(item)
+            if type(item) == unicode:
+                text = item
+            else:
+                text = str(item)
 
         # If cell wrapping is not specified
         if not ('wrap' in cell_style and cell_style['wrap']) and useHTML:
