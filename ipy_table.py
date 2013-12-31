@@ -58,7 +58,7 @@ This project is maintained at http://github.com/epmoyer/ipy_table
 import copy
 
 
-__version__ = 1.12
+__version__ = 1.13
 
 # Private table object used for interactive mode
 _TABLE = None
