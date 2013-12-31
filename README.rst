@@ -64,6 +64,9 @@ Revision History
   Remove the get_table_html() function (no longer necessary; can call
   render()._repr_html() in interactive mode).
 
+1.13
+  Fix unicode bug.  Unicode can now be used in cell contents. 
+  Example added to ipy_table-Test.ipynb. Thanks JoshRosen for the find!
 
 .. _`Eric Moyer`: mailto:eric@lemoncrab.com
 .. _Introduction: http://nbviewer.ipython.org/urls/raw.github.com/epmoyer/ipy_table/master/ipy_table-Introduction.ipynb 
