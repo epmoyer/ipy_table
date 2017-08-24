@@ -1,5 +1,18 @@
+#------------------
+# Caches
+#------------------
+.cache
 *.pyc
+.idea
+# macOS file-system supporting data
+.DS_Store
+
 .project
 .pydevproject
 *~
 release_images
+dist/
+ipy_table.egg-info/
+
+# Working directory for untracked files
+untracked/

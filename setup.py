@@ -12,7 +12,7 @@ This project is maintained at http://github.com/epmoyer/ipy_table
 from setuptools import setup
 setup(
     author="Eric Moyer",
-    author_email="<eric@lemoncrab.com>",
+    author_email="eric@lemoncrab.com",
     description="Creates richly formatted tables in an IPython Notebook",
     license="Modified BSD",
     keywords=['table', 'ipython', 'notebook'],
@@ -30,6 +30,6 @@ setup(
         ],
 
     name="ipy_table",
-    version="1.13",
+    version="1.14",
     py_modules=["ipy_table"],
 )
