@@ -7,12 +7,14 @@
 # macOS file-system supporting data
 .DS_Store
 
+.ipynb_checkpoints/
 .project
 .pydevproject
 *~
 release_images
 dist/
 ipy_table.egg-info/
+candidate_test_vectors.json
 
 # Working directory for untracked files
 untracked/

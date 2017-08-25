@@ -1,0 +1,846 @@
+[
+    {
+        "operations": {}, 
+        "description": "Default style", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0, 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ], 
+            [
+                30, 
+                31, 
+                32
+            ], 
+            [
+                40, 
+                41, 
+                42
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">0</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">10</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">11</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">12</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">20</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">30</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">31</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">32</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">40</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">41</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">42</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "apply_theme", 
+                {
+                    "theme_name": "basic"
+                }
+            ]
+        ], 
+        "description": "table.apply_theme(theme_name='basic')", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0, 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ], 
+            [
+                30, 
+                31, 
+                32
+            ], 
+            [
+                40, 
+                41, 
+                42
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"background-color:LightGray;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><b>0</b></td><td  style=\"background-color:LightGray;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><b>1</b></td><td  style=\"background-color:LightGray;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><b>2</b></td></tr><tr><td  style=\"background-color:Ivory;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">10</td><td  style=\"background-color:Ivory;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">11</td><td  style=\"background-color:Ivory;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">12</td></tr><tr><td  style=\"background-color:AliceBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">20</td><td  style=\"background-color:AliceBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"background-color:AliceBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22</td></tr><tr><td  style=\"background-color:Ivory;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">30</td><td  style=\"background-color:Ivory;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">31</td><td  style=\"background-color:Ivory;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">32</td></tr><tr><td  style=\"background-color:AliceBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">40</td><td  style=\"background-color:AliceBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">41</td><td  style=\"background-color:AliceBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">42</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "apply_theme", 
+                {
+                    "theme_name": "basic_left"
+                }
+            ]
+        ], 
+        "description": "table.apply_theme(theme_name='basic_left')", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0, 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ], 
+            [
+                30, 
+                31, 
+                32
+            ], 
+            [
+                40, 
+                41, 
+                42
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"background-color:LightGray;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><b>0</b></td><td  style=\"background-color:AliceBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"background-color:AliceBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td></tr><tr><td  style=\"background-color:LightGray;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><b>10</b></td><td  style=\"background-color:Ivory;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">11</td><td  style=\"background-color:Ivory;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">12</td></tr><tr><td  style=\"background-color:LightGray;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><b>20</b></td><td  style=\"background-color:AliceBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"background-color:AliceBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22</td></tr><tr><td  style=\"background-color:LightGray;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><b>30</b></td><td  style=\"background-color:Ivory;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">31</td><td  style=\"background-color:Ivory;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">32</td></tr><tr><td  style=\"background-color:LightGray;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><b>40</b></td><td  style=\"background-color:AliceBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">41</td><td  style=\"background-color:AliceBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">42</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "apply_theme", 
+                {
+                    "theme_name": "basic_both"
+                }
+            ]
+        ], 
+        "description": "table.apply_theme(theme_name='basic_both')", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                "", 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ], 
+            [
+                30, 
+                31, 
+                32
+            ], 
+            [
+                40, 
+                41, 
+                42
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"background-color:White;border-top: 1px transparent;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px transparent;\"><b></b></td><td  style=\"background-color:LightGray;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><b>1</b></td><td  style=\"background-color:LightGray;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><b>2</b></td></tr><tr><td  style=\"background-color:LightGray;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><b>10</b></td><td  style=\"background-color:Ivory;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">11</td><td  style=\"background-color:Ivory;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">12</td></tr><tr><td  style=\"background-color:LightGray;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><b>20</b></td><td  style=\"background-color:AliceBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"background-color:AliceBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22</td></tr><tr><td  style=\"background-color:LightGray;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><b>30</b></td><td  style=\"background-color:Ivory;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">31</td><td  style=\"background-color:Ivory;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">32</td></tr><tr><td  style=\"background-color:LightGray;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><b>40</b></td><td  style=\"background-color:AliceBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">41</td><td  style=\"background-color:AliceBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">42</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "set_cell_style", 
+                {
+                    "color": "red", 
+                    "column": 1, 
+                    "row": 1
+                }
+            ]
+        ], 
+        "description": "table.set_cell_style(color='red', column=1, row=1)", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0, 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">0</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">10</td><td  style=\"background-color:red;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">11</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">12</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">20</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "set_row_style", 
+                {
+                    "color": "lightGreen", 
+                    "row": 0
+                }
+            ]
+        ], 
+        "description": "table.set_row_style(color='lightGreen', row=0)", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0, 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"background-color:lightGreen;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">0</td><td  style=\"background-color:lightGreen;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"background-color:lightGreen;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">10</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">11</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">12</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">20</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "set_column_style", 
+                {
+                    "color": "lightBlue", 
+                    "column": 1
+                }
+            ]
+        ], 
+        "description": "table.set_column_style(color='lightBlue', column=1)", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0, 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">0</td><td  style=\"background-color:lightBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">10</td><td  style=\"background-color:lightBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">11</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">12</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">20</td><td  style=\"background-color:lightBlue;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "set_global_style", 
+                {
+                    "color": "Pink"
+                }
+            ]
+        ], 
+        "description": "table.set_global_style(color='Pink')", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0, 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"background-color:Pink;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">0</td><td  style=\"background-color:Pink;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"background-color:Pink;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td></tr><tr><td  style=\"background-color:Pink;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">10</td><td  style=\"background-color:Pink;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">11</td><td  style=\"background-color:Pink;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">12</td></tr><tr><td  style=\"background-color:Pink;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">20</td><td  style=\"background-color:Pink;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"background-color:Pink;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "set_row_style", 
+                {
+                    "bold": true, 
+                    "row": 1
+                }
+            ]
+        ], 
+        "description": "table.set_row_style(bold=True, row=1)", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0, 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">0</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><b>10</b></td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><b>11</b></td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><b>12</b></td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">20</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "set_row_style", 
+                {
+                    "italic": true, 
+                    "row": 1
+                }
+            ]
+        ], 
+        "description": "table.set_row_style(italic=True, row=1)", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0, 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">0</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><i>10</i></td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><i>11</i></td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"><i>12</i></td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">20</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "set_row_style", 
+                {
+                    "color": "Orange", 
+                    "row": 1
+                }
+            ]
+        ], 
+        "description": "table.set_row_style(color='Orange', row=1)", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0, 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">0</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td></tr><tr><td  style=\"background-color:Orange;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">10</td><td  style=\"background-color:Orange;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">11</td><td  style=\"background-color:Orange;border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">12</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">20</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "set_cell_style", 
+                {
+                    "thick_border": "left, top", 
+                    "column": 0, 
+                    "row": 0
+                }
+            ], 
+            [
+                "set_cell_style", 
+                {
+                    "thick_border": "bottom, right", 
+                    "column": 2, 
+                    "row": 2
+                }
+            ]
+        ], 
+        "description": "Thick border, outer corners", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0, 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"border-top: 3px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 3px solid;\">0</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">10</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">11</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">12</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">20</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"border-top: 1px solid;border-right: 3px solid;border-bottom: 3px solid;border-left: 1px solid;\">22</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "set_row_style", 
+                {
+                    "thick_border": "all", 
+                    "row": 1
+                }
+            ]
+        ], 
+        "description": "table.set_row_style(thick_border='all', row=1)", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0, 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">0</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td></tr><tr><td  style=\"border-top: 3px solid;border-right: 3px solid;border-bottom: 3px solid;border-left: 3px solid;\">10</td><td  style=\"border-top: 3px solid;border-right: 3px solid;border-bottom: 3px solid;border-left: 3px solid;\">11</td><td  style=\"border-top: 3px solid;border-right: 3px solid;border-bottom: 3px solid;border-left: 3px solid;\">12</td></tr><tr><td  style=\"border-top: 3px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">20</td><td  style=\"border-top: 3px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"border-top: 3px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "set_cell_style", 
+                {
+                    "column": 0, 
+                    "no_border": "left, top", 
+                    "row": 0
+                }
+            ], 
+            [
+                "set_cell_style", 
+                {
+                    "column": 2, 
+                    "no_border": "bottom, right", 
+                    "row": 2
+                }
+            ]
+        ], 
+        "description": "No border, outer corners", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0, 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"border-top: 1px transparent;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px transparent;\">0</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">10</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">11</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">12</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">20</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"border-top: 1px solid;border-right: 1px transparent;border-bottom: 1px transparent;border-left: 1px solid;\">22</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "set_row_style", 
+                {
+                    "no_border": "all", 
+                    "row": 1
+                }
+            ]
+        ], 
+        "description": "table.set_row_style(no_border='all', row=1)", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0, 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px transparent;border-left: 1px solid;\">0</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px transparent;border-left: 1px solid;\">1</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px transparent;border-left: 1px solid;\">2</td></tr><tr><td  style=\"border-top: 1px transparent;border-right: 1px transparent;border-bottom: 1px transparent;border-left: 1px transparent;\">10</td><td  style=\"border-top: 1px transparent;border-right: 1px transparent;border-bottom: 1px transparent;border-left: 1px transparent;\">11</td><td  style=\"border-top: 1px transparent;border-right: 1px transparent;border-bottom: 1px transparent;border-left: 1px transparent;\">12</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">20</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "set_cell_style", 
+                {
+                    "column": 0, 
+                    "row_span": 3, 
+                    "row": 0
+                }
+            ]
+        ], 
+        "description": "table.set_cell_style(column=0, row_span=3, row=0)", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0, 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td rowspan=\"3\"; style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">0</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">11</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">12</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "set_cell_style", 
+                {
+                    "column": 1, 
+                    "column_span": 2, 
+                    "row": 1
+                }
+            ]
+        ], 
+        "description": "table.set_cell_style(column=1, column_span=2, row=1)", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0, 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">0</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">10</td><td colspan=\"2\"; style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">11</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">20</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "set_cell_style", 
+                {
+                    "column": 0, 
+                    "width": 100, 
+                    "row": 0
+                }
+            ]
+        ], 
+        "description": "table.set_cell_style(column=0, width=100, row=0)", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0, 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;width:100px;\">0</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">10</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">11</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">12</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">20</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "set_cell_style", 
+                {
+                    "column": 0, 
+                    "width": 100, 
+                    "row": 0
+                }
+            ], 
+            [
+                "set_cell_style", 
+                {
+                    "column": 0, 
+                    "align": "right", 
+                    "row": 0
+                }
+            ], 
+            [
+                "set_cell_style", 
+                {
+                    "column": 0, 
+                    "align": "center", 
+                    "row": 1
+                }
+            ], 
+            [
+                "set_cell_style", 
+                {
+                    "column": 0, 
+                    "align": "left", 
+                    "row": 2
+                }
+            ]
+        ], 
+        "description": "Alignment (right, center, and left)", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0, 
+                1, 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;text-align:right;width:100px;\">0</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;text-align:center;\">10</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">11</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">12</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;text-align:left;\">20</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "set_cell_style", 
+                {
+                    "wrap": true, 
+                    "width": 50, 
+                    "column": 0, 
+                    "row": 0
+                }
+            ], 
+            [
+                "set_cell_style", 
+                {
+                    "column": 1, 
+                    "widph": 50, 
+                    "row": 0
+                }
+            ]
+        ], 
+        "description": "Wrap", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                "This cell has wrap set", 
+                "This cell does not have wrap set", 
+                2
+            ], 
+            [
+                10, 
+                11, 
+                12
+            ], 
+            [
+                20, 
+                21, 
+                22
+            ], 
+            [
+                30, 
+                31, 
+                32
+            ], 
+            [
+                40, 
+                41, 
+                42
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;width:50px;\">This cell has wrap set</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">This&nbspcell&nbspdoes&nbspnot&nbsphave&nbspwrap&nbspset</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">10</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">11</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">12</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">20</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">30</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">31</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">32</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">40</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">41</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">42</td></tr></table>"
+    }, 
+    {
+        "operations": [
+            [
+                "set_cell_style", 
+                {
+                    "column": 0, 
+                    "float_format": "%0.1f", 
+                    "row": 0
+                }
+            ], 
+            [
+                "set_cell_style", 
+                {
+                    "column": 0, 
+                    "float_format": "%0.6f", 
+                    "row": 1
+                }
+            ], 
+            [
+                "set_cell_style", 
+                {
+                    "column": 0, 
+                    "float_format": "$%0.2f", 
+                    "row": 2
+                }
+            ]
+        ], 
+        "description": "Wrap", 
+        "tabulate_columns": null, 
+        "data": [
+            [
+                0.0, 
+                1.0101, 
+                2.0202, 
+                3.0303
+            ], 
+            [
+                10.100999999999999, 
+                11.111099999999999, 
+                12.1212, 
+                13.131300000000001
+            ], 
+            [
+                20.201999999999998, 
+                21.2121, 
+                22.222199999999997, 
+                23.232300000000002
+            ]
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">0.0</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1.0101</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2.0202</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">3.0303</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">10.101000</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">11.1111</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">12.1212</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">13.1313</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">$20.20</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">21.2121</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">22.2222</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">23.2323</td></tr></table>"
+    }, 
+    {
+        "operations": [], 
+        "description": "Tabulate, 4 columns, without wrap", 
+        "tabulate_columns": 4, 
+        "data": [
+            0, 
+            1, 
+            2, 
+            3, 
+            4, 
+            5, 
+            6, 
+            7
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">0</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">3</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">4</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">5</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">6</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">7</td></tr></table>"
+    }, 
+    {
+        "operations": [], 
+        "description": "Tabulate, 4 columns, with wrap", 
+        "tabulate_columns": 4, 
+        "data": [
+            0, 
+            1, 
+            2, 
+            3, 
+            4, 
+            5, 
+            6, 
+            7, 
+            8, 
+            9, 
+            10
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">0</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">3</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">4</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">5</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">6</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">7</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">8</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">9</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">10</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"></td></tr></table>"
+    }, 
+    {
+        "operations": [], 
+        "description": "Tabulate, 5 columns, with wrap", 
+        "tabulate_columns": 5, 
+        "data": [
+            0, 
+            1, 
+            2, 
+            3, 
+            4, 
+            5, 
+            6, 
+            7, 
+            8, 
+            9, 
+            10
+        ], 
+        "result_html": "", 
+        "expected_html": "<table border=\"1\" cellpadding=\"3\" cellspacing=\"0\"  style=\"border:black; border-collapse:collapse;\"><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">0</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">1</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">2</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">3</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">4</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">5</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">6</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">7</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">8</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">9</td></tr><tr><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\">10</td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"></td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"></td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"></td><td  style=\"border-top: 1px solid;border-right: 1px solid;border-bottom: 1px solid;border-left: 1px solid;\"></td></tr></table>"
+    }
+]

@@ -56,9 +56,7 @@ This project is maintained at http://github.com/epmoyer/ipy_table
 """
 
 import copy
-
-
-__version__ = 1.13
+from six import string_types
 
 # Private table object used for interactive mode
 _TABLE = None
@@ -102,7 +100,7 @@ class IpyTable(object):
         # Generate TABLE tag (<tr>)
         #---------------------------------------
         html = '<table border="1" cellpadding="3" cellspacing="0" ' \
-            + ' style="border:1px solid black;border-collapse:collapse;">'
+            + ' style="border:black; border-collapse:collapse;">'
 
         for row, row_data in enumerate(self.array):
 
@@ -226,7 +224,8 @@ class IpyTable(object):
                 border_setting = style_dict[border_type]
 
                 # Type checking
-                if type(border_setting) != str:
+
+                if not isinstance(border_setting, string_types):
                     raise TypeError(
                         ('%s must be a string of comma ' % border_type) +
                         'separated border names (e.g. "left,right")')
@@ -316,13 +315,24 @@ class IpyTable(object):
         if _key_is_valid(style_dict, 'color'):
             style_html += 'background-color:' + style_dict['color'] + ';'
 
+        # Default to 1px solid. Style settings for 'thick_border'
+        # and 'no_border' will modify these defaults.
+        edges = {edge:dict(thickness=1, color='solid') for edge in 
+                 ('left', 'right', 'top', 'bottom')}
+
         if _key_is_valid(style_dict, 'thick_border'):
-            for edge in self._split_by_comma(style_dict['thick_border']):
-                style_html += 'border-%s: 3px solid black;' % edge
+            for edge_name in self._split_by_comma(style_dict['thick_border']):
+                edges[edge_name]['thickness'] = 3
+                edges[edge_name]['color'] = 'solid'
 
         if _key_is_valid(style_dict, 'no_border'):
-            for edge in self._split_by_comma(style_dict['no_border']):
-                style_html += 'border-%s: 1px solid transparent;' % edge
+            for edge_name in self._split_by_comma(style_dict['no_border']):
+                edges[edge_name]['thickness'] = 1
+                edges[edge_name]['color'] = 'transparent'
+
+        for edge_name, edge_properties in edges.items():
+            style_html += 'border-{}: {}px {};'.format(
+                edge_name, edge_properties['thickness'], edge_properties['color'])
 
         if _key_is_valid(style_dict, 'align'):
             style_html += 'text-align:' + str(style_dict['align']) + ';'
