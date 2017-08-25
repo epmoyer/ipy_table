@@ -53,11 +53,11 @@ Testing
 To execute the tests, run ``py.test`` from the project root directory
 
 .. _`Eric Moyer`: mailto:eric@lemoncrab.com
-.. _Introduction: http://nbviewer.ipython.org/urls/raw.github.com/epmoyer/ipy_table/master/ipy_table-Introduction.ipynb 
-.. _Reference: http://nbviewer.ipython.org/urls/raw.github.com/epmoyer/ipy_table/master/ipy_table-Reference.ipynb
+.. _Introduction: http://nbviewer.ipython.org/urls/raw.github.com/epmoyer/ipy_table/master/notebooks/ipy_table-Introduction.ipynb 
+.. _Reference: http://nbviewer.ipython.org/urls/raw.github.com/epmoyer/ipy_table/master/notebooks/ipy_table-Reference.ipynb
 .. |Build Status| image:: http://img.shields.io/travis/epmoyer/ipy_table.svg?style=flat-square
    :target: https://travis-ci.org/epmoyer/ipy_table
 .. |Coverage| image:: http://img.shields.io/coveralls/epmoyer/ipy_table.svg?style=flat-square
-   :target: https://coveralls.io/r/epmoyer/ipy_table
+   :target: https://coveralls.io/github/epmoyer/ipy_table?branch=master
 .. |Version| image:: http://img.shields.io/pypi/v/ipy_table.svg?style=flat-square
    :target: https://pypi.python.org/pypi/ipy_table/
