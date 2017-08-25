@@ -84,7 +84,7 @@ class IpyTable(object):
 
         # Float type checking is performed by calling
         # str(type(value)) and comparing it to the 
-        # list below (to provide numpy compatability
+        # list below (to provide numpy compatibility
         # without having it as a dependency)
         self._float_types = [
             # Python 2
@@ -395,7 +395,7 @@ class IpyTable(object):
         # If cell wrapping is not specified
         if not ('wrap' in cell_style and cell_style['wrap']):
             # Convert all spaces to non-breaking and return
-            text = text.replace(' ', '&nbsp')
+            text = text.replace(' ', '&nbsp;')
         return text
 
     def _split_by_comma(self, comma_delimited_text):
