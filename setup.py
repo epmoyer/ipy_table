@@ -34,6 +34,6 @@ setup(
         ],
 
     name="ipy_table",
-    version="1.15.0a",
+    version="1.15.0",
     py_modules=["ipy_table"],
 )

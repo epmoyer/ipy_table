@@ -11,7 +11,10 @@ The format is based on `Keep a Changelog`_ and this project adheres to `Semantic
 Unreleased
 ----------
 
-``1.15.0a``
+(None)
+
+1.15.0 - 2017-Aug-25
+--------------------
 
 Changed
 ^^^^^^^
@@ -26,6 +29,10 @@ Changed
 
 - Moved source into ``ipy_table`` module directory
 - Moved history from README.rst to CHANGELOG.rst
+
+Fixed
+^^^^^
+- Use ``&nbsp;`` instead of ``&nbsp``
 
 Added
 ^^^^^
