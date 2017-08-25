@@ -11,10 +11,12 @@ The format is based on `Keep a Changelog`_ and this project adheres to `Semantic
 Unreleased
 ----------
 
-The next release implements py.test, which will be used to validate a subsequent release to add support for Python 3.
+``1.15.0a``
 
 Changed
 ^^^^^^^
+
+- Compatibility now Python 2.7, 3.3, 3.4, 3.5, 3.6
 - Defaulted to solid cell borders, so that table behavior remains consistent in the current version of Jupyter.
 
   - Jupyter 4.3.0 now defaults to invisible cell borders, though I am not sure in which version the change was first made
