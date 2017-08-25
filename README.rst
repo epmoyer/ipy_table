@@ -32,7 +32,7 @@ The documentation notebooks can be viewed online with nbviewer at Introduction_ 
 Dependencies and Supported Python Versions
 ==========================================
 
-At this time, ipy_table has only been tested with Python 2.7 under Linux and Windows.  Test coverage and Travis integration have been added to support development of Python 3 compatibility.
+At this time, ipy_table has only been tested with Python 2.7 under Linux and Windows.  Test coverage and Travis integration are being added as of ``1.15.0`` to facilitate developing Python 3 compatibility.
 
 ipy_table is designed to be used within a Jupyter Notebook.
 
