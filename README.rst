@@ -11,39 +11,41 @@ ipy_table
 Overview
 ========
 
-ipy_table is a support module for Jupyter Notebooks. ipy_table is an independent project and is not an official component of the Jupyter package.
+``ipy_table`` is a support module for Jupyter Notebooks. ipy_table is an independent project and is not an official component of the Jupyter package.
 
-The home page for ipy_table is http://epmoyer.github.com/ipy_table/
+The home page for ``ipy_table`` is http://epmoyer.github.com/ipy_table/
 
-ipy_table is maintained at http://github.com/epmoyer/ipy_table
+``ipy_table`` is maintained at http://github.com/epmoyer/ipy_table
 
-ipython is maintained at http://github.com/ipython, and documentation is available from http://ipython.org/
+IPython is maintained at http://github.com/ipython, and documentation is available from http://ipython.org/
+
+Jupyter is maintained at https://github.com/jupyter, and documentation is available at http://jupyter.org/
 
 Documentation
 =============
 
 Documentation is provided by the documentation notebooks supplied with this package::
 
-    ipy_table-Introduction.ipynb
-    ipy_table-Reference.ipynb
+    notebooks/ipy_table-Introduction.ipynb
+    notebooks/ipy_table-Reference.ipynb
 
 The documentation notebooks can be viewed online with nbviewer at Introduction_ and Reference_.
 
 Dependencies and Supported Python Versions
 ==========================================
 
-At this time, ipy_table has only been tested with Python 2.7 under Linux and Windows.  Test coverage and Travis integration are being added as of ``1.15.0`` to facilitate developing Python 3 compatibility.
+``ipy_table`` works with Python 2.7, 3.3, 3.4, 3.5, and 3.6
 
-ipy_table is designed to be used within a Jupyter Notebook.
+``ipy_table`` is designed to be used within a Jupyter Notebook.
 
-IPython qtconsole operation is not currently officially supported.  ipy_table renders tables using HTML, and HTML tables render differently in the IPython qtconsole than in a Jupyter notebook for reasons which I have not yet unraveled.  Particularly, cell border rendering behaves differently.
+IPython qtconsole operation is not currently officially supported.  ``ipy_table`` renders tables using HTML, and HTML tables render differently in the IPython qtconsole than in a Jupyter notebook for reasons which I have not yet unraveled.  Particularly, cell border rendering behaves differently.
 
 Installation
 ============
 
-1) Run ``python setup.py install``.
+1) Run: ``pip install ipy_table``
 
-2) Copy the documentation notebooks (ipy_table-Introduction.ipynb and ipy_table-Reference.ipynb) to your main Jupyter notebook working directory (the directory where your Jupyter notebooks are stored).
+2) Copy the documentation notebooks (``notebooks/ipy_table-Introduction.ipynb`` and ``notebooks/ipy_table-Reference.ipynb``) to your main Jupyter notebook working directory (the directory where your Jupyter notebooks are stored).
 
 If you don't know your Jupyter notebook working directory, start the Jupyter Notebook server, create a blank notebook, and execute the command 'pwd'.
 
@@ -51,6 +53,7 @@ Testing
 =======
 
 To execute the tests, run ``py.test`` from the project root directory
+NumPy (``numpy``) is a dependency for running the tests, but is not a dependency for installing / using ``ipy_table``
 
 .. _`Eric Moyer`: mailto:eric@lemoncrab.com
 .. _Introduction: http://nbviewer.ipython.org/urls/raw.github.com/epmoyer/ipy_table/master/notebooks/ipy_table-Introduction.ipynb 
