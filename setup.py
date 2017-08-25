@@ -1,3 +1,5 @@
+# coding=utf-8
+
 """Table formatting package for IP[y] Notebooks
 
 Copyright (c) 2012-2013, ipy_table Development Team.
@@ -9,8 +11,26 @@ The full license is in the file COPYING.txt, distributed with this software.
 This project is maintained at http://github.com/epmoyer/ipy_table
 """
 
-from setuptools import setup
+from setuptools import setup, find_packages
+from codecs import open
+import os
+
+def read(fname):
+    path = os.path.join(os.path.dirname(__file__), fname)
+    return open(path, encoding='utf-8').read()
+
+# This will set the version string to __version__
+exec(read('ipy_table/version.py'))
+
 setup(
+    name="ipy_table",
+    version=__version__,
+    packages=find_packages(),
+
+    # development metadata
+    zip_safe=True,
+
+    # metadata for upload to PyPI
     author="Eric Moyer",
     author_email="eric@lemoncrab.com",
     description="Creates richly formatted tables in a Jypyter Notebook",
@@ -32,8 +52,4 @@ setup(
         'Topic :: Text Processing :: Markup :: HTML',
         'Topic :: Scientific/Engineering',
         ],
-
-    name="ipy_table",
-    version="1.15.0",
-    py_modules=["ipy_table"],
 )

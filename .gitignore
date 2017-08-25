@@ -13,6 +13,7 @@
 *~
 release_images
 dist/
+build/
 ipy_table.egg-info/
 candidate_test_vectors.json
 notebooks/adopt_vectors.sh

@@ -13,6 +13,13 @@ Unreleased
 
 (None)
 
+1.15.1 - 2017-Aug-25
+--------------------
+
+Fixed
+^^^^^
+- fix packages in setup.py
+
 1.15.0 - 2017-Aug-25
 --------------------
 
