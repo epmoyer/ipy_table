@@ -6,7 +6,7 @@
 ipy_table
 #########
 
-|Build Status| |Coverage| |Version|
+|Build Status| |Coverage| |PyPIVersion| |Tag|
 
 Overview
 ========
@@ -55,12 +55,28 @@ Testing
 To execute the tests, run ``py.test`` from the project root directory
 NumPy (``numpy``) is a dependency for running the tests, but is not a dependency for installing / using ``ipy_table``
 
+Contributors
+============
+
+Ordered by date of first contribution
+
+- `Eric Moyer <https://github.com/epmoyer>`_ aka ``epmoyer``
+- `Matthias Bussonnier <https://github.com/Carreau>`_ aka ``Carreau``
+- `Josh Rosen <https://github.com/JoshRosen>`_ aka ``JoshRosen``
+- `Dominic R. May <https://github.com/Mause>`_ aka ``Mause``
+- `Francisco J Lopez-Pellicer <https://github.com/fjlopez>`_ aka ``fjlopez``
+- `jhykes <https://githu b.com/jhykes>`_
+- `Jack Lamberti <https://githu b.com/jamlamberti>`_ aka ``jamlamberti``
+
+
 .. _`Eric Moyer`: mailto:eric@lemoncrab.com
 .. _Introduction: http://nbviewer.ipython.org/urls/raw.github.com/epmoyer/ipy_table/master/notebooks/ipy_table-Introduction.ipynb 
 .. _Reference: http://nbviewer.ipython.org/urls/raw.github.com/epmoyer/ipy_table/master/notebooks/ipy_table-Reference.ipynb
-.. |Build Status| image:: http://img.shields.io/travis/epmoyer/ipy_table.svg?style=flat-square
+.. |Build Status| image:: https://img.shields.io/travis/epmoyer/ipy_table.svg?style=flat
    :target: https://travis-ci.org/epmoyer/ipy_table
-.. |Coverage| image:: http://img.shields.io/coveralls/epmoyer/ipy_table.svg?style=flat-square
+.. |Coverage| image:: https://img.shields.io/coveralls/epmoyer/ipy_table.svg?style=flat
    :target: https://coveralls.io/github/epmoyer/ipy_table?branch=master
-.. |Version| image:: http://img.shields.io/pypi/v/ipy_table.svg?style=flat-square
+.. |PyPIVersion| image:: https://img.shields.io/pypi/v/ipy_table.svg?style=flat
    :target: https://pypi.python.org/pypi/ipy_table/
+.. |Tag| image:: https://img.shields.io/github/tag/epmoyer/ipy_table.svg?style=flat
+   :target: https://github.com/epmoyer/ipy_table/tags

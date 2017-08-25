@@ -46,11 +46,11 @@ Design goals:
       HTML row styles and table styles are never manipulated).
 
 ---------------------------------------------------------------------------
-Copyright (c) 2012-2013, ipy_table Development Team.
+Copyright (c) 2012-2017, ipy_table Development Team.
 
 Distributed under the terms of the Modified BSD License.
 
-The full license is in the file COPYING.txt, distributed with this software.
+The full license is in the file LICENSE, distributed with this software.
 
 This project is maintained at http://github.com/epmoyer/ipy_table
 """
