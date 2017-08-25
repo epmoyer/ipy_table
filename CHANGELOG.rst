@@ -1,5 +1,5 @@
-Otto Changelog
-==============
+Changelog
+=========
 
 All notable changes to this project will be documented in this file.
 
@@ -31,6 +31,7 @@ Added
 
   - Test vector generator notebook: ``ipy_table-MakeTestVectors.ipynb``
   - Test vector failure visualization notebook: ``ipy_table-VerifyTestVectors.ipynb``
+  - numpy is required for testing, but not for general ipy_table installation/use
 
 1.14 - 2017-Aug-24
 ------------------

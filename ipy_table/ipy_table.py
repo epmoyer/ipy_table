@@ -56,6 +56,7 @@ This project is maintained at http://github.com/epmoyer/ipy_table
 """
 
 import copy
+from collections import OrderedDict
 from six import string_types
 
 # Private table object used for interactive mode
@@ -80,6 +81,25 @@ class IpyTable(object):
 
         self._num_rows = len(array)
         self._num_columns = len(array[0])
+
+        # Float type checking is performed by calling
+        # str(type(value)) and comparing it to the 
+        # list below (to provide numpy compatability
+        # without having it as a dependency)
+        self._float_types = [
+            # Python 2
+            "<type 'float'>",
+            "<type 'numpy.float16'>",
+            "<type 'numpy.float32'>",
+            "<type 'numpy.float64'>",
+            "<type 'numpy.float128'>",
+            # Python 3
+            "<class 'float'>",
+            "<class 'numpy.float16'>",
+            "<class 'numpy.float32'>",
+            "<class 'numpy.float64'>",
+            "<class 'numpy.float128'>",
+            ]
 
         # Check that array is well formed
         for row in array:
@@ -317,8 +337,9 @@ class IpyTable(object):
 
         # Default to 1px solid. Style settings for 'thick_border'
         # and 'no_border' will modify these defaults.
-        edges = {edge:dict(thickness=1, color='solid') for edge in 
-                 ('left', 'right', 'top', 'bottom')}
+        edges = OrderedDict()
+        for edge_name in ('left', 'right', 'top', 'bottom'):
+            edges[edge_name] = dict(thickness=1, color='solid')
 
         if _key_is_valid(style_dict, 'thick_border'):
             for edge_name in self._split_by_comma(style_dict['thick_border']):
@@ -359,18 +380,14 @@ class IpyTable(object):
     def _formatter(self, item, cell_style):
         """Apply formatting to cell contents.
 
-        Applies float format to item if item is a float or float64.
+        Applies float format to item if item is a float (or numpy float).
         Converts spaces to non-breaking if wrap is not enabled.
         Returns string.
         """
-
-        # The following check is performed as a string comparison
-        # so that ipy_table does not need to require (import) numpy.
-        if (str(type(item)) in ["<type 'float'>", "<type 'numpy.float64'>"]
-                and 'float_format' in cell_style):
+        if _is_float_type(item) and 'float_format' in cell_style:
             text = cell_style['float_format'] % item
         else:
-            if type(item) == unicode:
+            if isinstance(item, string_types):
                 text = item
             else:
                 text = str(item)
@@ -397,7 +414,7 @@ def tabulate(data_list, columns, interactive=True):
 
     _INTERACTIVE = interactive
     total_items = len(data_list)
-    rows = total_items / columns
+    rows = int(total_items / columns)
     if total_items % columns:
         rows += 1
     num_blank_cells = rows * columns - total_items
@@ -408,7 +425,7 @@ def tabulate(data_list, columns, interactive=True):
     array = copy.copy(_convert_to_list(data_list))
     pad_cells = ['' for dummy in range(num_blank_cells)]
     array = array + pad_cells
-    array = [array[x:x + columns] for x in xrange(0, len(array), columns)]
+    array = [array[x:x + columns] for x in range(0, len(array), columns)]
 
     # Render the array
     _TABLE = IpyTable(array)
@@ -495,6 +512,34 @@ def get_interactive_return_value():
 # Private functions
 #-----------------------------
 
+_FLOAT_TYPES = [
+    # Python 2
+    "<type 'float'>",
+    "<type 'numpy.float'>",
+    "<type 'numpy.float16'>",
+    "<type 'numpy.float32'>",
+    "<type 'numpy.float64'>",
+    "<type 'numpy.float128'>",
+    # Python 3
+    "<class 'float'>",
+    "<class 'numpy.float'>"
+    "<class 'numpy.float'>",
+    "<class 'numpy.float16'>",
+    "<class 'numpy.float32'>",
+    "<class 'numpy.float64'>",
+    "<class 'numpy.float128'>",
+    ]
+
+def _is_float_type(value):
+    ''' True if type(value) is one of several float types
+
+    Float type checking is performed by calling
+    str(type(value)) and comparing it to known string
+    representations of float types to provide numpy
+    compatibility without having numpy as a dependency
+    '''
+    return str(type(value)) in _FLOAT_TYPES
+    
 
 def _convert_to_list(data):
     """Accepts a list or a numpy.ndarray and returns a list."""

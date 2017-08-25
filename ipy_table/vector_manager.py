@@ -4,8 +4,12 @@ A test vector manager for validating ipy_table
 '''
 
 import json
+import re
 import pprint
+from copy import deepcopy
 
+from six import string_types
+import numpy as np
 from ipy_table import make_table, tabulate
 from IPython.display import display, HTML
 
@@ -79,7 +83,8 @@ class VectorManager(object):
         vector['result_html'] = ''
 
         self.vectors.append(vector)
-        self._show(vector)
+        print('Vector {}:'.format(len(self.vectors)-1))
+        self._show(vector, indent = '    ')
     
     def show_all(self):
         ''' Show all test vectors
@@ -95,15 +100,25 @@ class VectorManager(object):
     def save(self, filename):
         ''' Save test vectors to a JSON file 
         '''
+
+        # Convert numpy types for (custom) JSON serialization
+        save_vectors = deepcopy(self.vectors)
+        for vector in save_vectors:
+            vector['data'] = _serialize_numpy(vector['data'])
+
         with open(filename, 'w') as out_file:
-            out_file.write(json.dumps(self.vectors, indent=4))
-        print('Saved {} vectors.'.format(len(self.vectors)))
+            out_file.write(json.dumps(save_vectors, indent=4))
+        print('Saved {} vectors.'.format(len(save_vectors)))
             
     def _load(self, filename):
         ''' Load test vectors from a JSON file 
         '''
         with open(filename, 'r') as in_file:
             self.vectors = json.load(in_file)
+
+        # Deserialize numpy types from (custom) JSON storage format
+        for vector in self.vectors:
+            vector['data'] = _deserialize_numpy(vector['data'])
             
     @staticmethod
     def _show(vector, indent=''):
@@ -126,14 +141,14 @@ class VectorManager(object):
                       'table.' +
                       method_name +
                       '(' +
-                      kwargs_to_str(kwargs_dict) +
+                      _kwargs_to_str(kwargs_dict) +
                       ')'
                      )
         print(indent + 'expected_html:')
-        display(HTML(html_indent(vector['expected_html'])))
+        display(HTML(_html_indent(vector['expected_html'])))
         if vector['result_html']:
             print(indent + 'result_html:')
-            display(HTML(vector['result_html']))
+            display(HTML(_html_indent(vector['result_html'])))
         
     @staticmethod
     def render_table_call(method_name, kwargs_dict):
@@ -146,7 +161,7 @@ class VectorManager(object):
             'table.' +
             method_name +
             '(' +
-            kwargs_to_str(kwargs_dict) +
+            _kwargs_to_str(kwargs_dict) +
             ')')
 
     @staticmethod
@@ -177,13 +192,84 @@ class VectorManager(object):
 
         return vector['result_html'] == vector['expected_html']
 
-def kwargs_to_str(kwargs_dict):
+def _kwargs_to_str(kwargs_dict):
     ''' Converts a kwargs dict into a string representation of normal fn call syntax
 
         render_table_call({'this': 5, 'that':7}) => 'this=5, that=7'
         '''
     return ', '.join([key + '=' + repr(value) for key, value in kwargs_dict.items()])
 
-def html_indent(html):
+def _html_indent(html):
     '''Return html wrapped by an indenting div'''
     return '<div style="margin-left: 35px;">' + html + '</div>'
+
+def _serialize_numpy(item):
+    '''Serialize a list or item containing 0 or more numpy float objects
+
+    Arguments:
+        item: list or object
+    Returns:
+        The item, with all instances of numpy float types converted to a
+        string of the form: 'numpy.<numpy_type>(<value>)'
+    
+    Example:
+        _serialize_numpy(numpy.float64(1.234)) => 'numpy.float64(1.234)'
+        _serialize_numpy([ numpy.float64(1.234), numpy.float32(5.678)]) =>
+            ['numpy.float64(1.234)', 'numpy.float32(5.678)']
+    '''
+    if isinstance(item, (list, tuple)):
+        # item is a list.  Process the elements
+        return [_serialize_numpy(x) for x in item]
+    else:
+        type_str = repr(type(item))
+        if type_str.startswith("<type 'numpy") or type_str.startswith("<class 'numpy"):
+            type_str = type_str.strip("'>").strip("<type '").strip("<class '")
+            # Serialize numpy object into a string of the form
+            #    'numpy.<numpy_type>(<value>)'
+            # example:
+            #    'numpy.float64(1.234)'
+            return type_str + '(' + str(item) + ')'
+
+        # Return the item unmodified
+        return item
+
+def _deserialize_numpy(item):
+    '''De-serialize a list or item containing 0 or more serialized numpy float objects
+
+    Serialized numpy objects have the form: 'numpy.<numpy_type>(<value>)'
+
+    Arguments:
+        item: list or object
+    Returns:
+        The item, with all instances of serialized numpy float types converted 
+        to the associated numpy float type.
+    
+    Example:
+        _serialize_numpy('numpy.float64(1.234)') => numpy.float64(1.234)
+        _serialize_numpy(['numpy.float64(1.234)', 'numpy.float32(5.678)']) =>
+            [ numpy.float64(1.234), numpy.float32(5.678)]
+    '''
+    
+    if isinstance(item, (list, tuple)):
+        # item is a list.  Process the elements
+        return [_deserialize_numpy(x) for x in item]
+    else:
+        if isinstance(item, string_types) and item.startswith('numpy.'):
+            match = re.match(r'^numpy\.(\w*)\(([\d\.]*)\)', item)
+            if match and len(match.groups()) == 2:
+                type_str, value_str = match.groups()
+                if type_str == 'float16':
+                    return np.float16(value_str)
+                elif type_str == 'float32':
+                    return np.float32(value_str)
+                elif type_str == 'float64':
+                    return np.float64(value_str)
+                elif type_str == 'float128':
+                    return np.float128(value_str)
+                
+            raise ValueError("Unexpected numpy serialization format: '{}'".format(item))
+
+        # Return the item unmodified
+        return item
+
+

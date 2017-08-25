@@ -7,6 +7,8 @@ python:
 matrix:
   allow_failures:
   - python: 3.6
+install:
+  - pip install -r dev_requirements.txt
 cache: pip
 script:
   - py.test
